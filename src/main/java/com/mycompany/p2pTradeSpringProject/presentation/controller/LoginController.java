@@ -1,5 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.presentation.controller;
 
+import com.mycompany.p2pTradeSpringProject.constants.Urls;
 import com.mycompany.p2pTradeSpringProject.dto.LoginRequest;
 import com.mycompany.p2pTradeSpringProject.exception.BadCredentialsException;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/login")
+@RequestMapping(Urls.LOGIN)
 @AllArgsConstructor
 public class LoginController { //TODO: Change to Spring Security / change session
 
@@ -20,7 +21,7 @@ public class LoginController { //TODO: Change to Spring Security / change sessio
     @GetMapping
     public String login(HttpServletRequest request) {
         if (request.getSession().getAttribute("authenticatedUser") != null) {
-            return "redirect:/home"; // Redirect to home page if user is already authenticated
+            return "redirect:" + Urls.HOME; // Redirect to home page if user is already authenticated
         }
         return "login";
     }
@@ -32,17 +33,17 @@ public class LoginController { //TODO: Change to Spring Security / change sessio
                             HttpServletRequest request) {
 
         if (request.getSession().getAttribute("authenticatedUser") != null) {
-            return "redirect:/home"; // Redirect to home page if user is already authenticated
+            return "redirect:" + Urls.HOME; // Redirect to home page if user is already authenticated
         }
 
         try {
             User authenticatedUser = authService.login(loginRequest);
             request.getSession().setAttribute("authenticatedUser", authenticatedUser);
-            return "redirect:/home"; // Redirect to home page on successful login
+            return "redirect:" + Urls.HOME; // Redirect to home page on successful login
 
         } catch (BadCredentialsException e) {
             redirectAttributes.addFlashAttribute("error", "Invalid username or password");
-            return "redirect:/login"; // Redirect back to login page on failure
+            return "redirect:" + Urls.LOGIN; // Redirect back to login page on failure
         }
     }
 }

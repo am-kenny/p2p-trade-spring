@@ -1,5 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.presentation.controller;
 
+import com.mycompany.p2pTradeSpringProject.constants.Urls;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.UserVerification;
 import com.mycompany.p2pTradeSpringProject.service.UserVerificationService;
@@ -16,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Controller
-@RequestMapping("/verify")
+@RequestMapping(Urls.VERIFY)
 @AllArgsConstructor
 public class VerificationController {
 
@@ -25,7 +26,7 @@ public class VerificationController {
     @GetMapping
     public String verify(HttpServletRequest request) {
         if (request.getSession().getAttribute("authenticatedUser") == null) {
-            return "redirect:/login"; // Redirect to login page if user is not authenticated
+            return "redirect:" + Urls.LOGIN; // Redirect to login page if user is not authenticated
         }
         return "verify";
     }
@@ -37,7 +38,7 @@ public class VerificationController {
                              @RequestParam("passport_photo") MultipartFile passport_photo,
                              HttpServletRequest request) {
         if (request.getSession().getAttribute("authenticatedUser") == null) {
-            return "redirect:/login"; // Redirect to login page if user is not authenticated
+            return "redirect:" + Urls.LOGIN; // Redirect to login page if user is not authenticated
         }
 
         try {
@@ -54,10 +55,10 @@ public class VerificationController {
             User user = (User) request.getSession().getAttribute("authenticatedUser");
             userVerificationService.verifyUser(user.getId(), userVerification);
         } catch (IOException e) {
-            return "redirect:/verify"; // Redirect back to verify page on failure
+            return "redirect:" + Urls.VERIFY; // Redirect back to verify page on failure
         }
 
-        return "redirect:/profile";
+        return "redirect:" + Urls.PROFILE; // Redirect to profile page on success
     }
 
 }

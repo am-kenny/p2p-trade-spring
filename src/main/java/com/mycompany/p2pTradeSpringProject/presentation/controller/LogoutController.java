@@ -1,5 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.presentation.controller;
 
+import com.mycompany.p2pTradeSpringProject.constants.Urls;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -8,7 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
-@RequestMapping("/logout")
+@RequestMapping(Urls.LOGOUT)
 @AllArgsConstructor
 public class LogoutController {
 
@@ -19,6 +20,6 @@ public class LogoutController {
                 request.getSession().removeAttribute("authenticatedUser");
                 redirectAttributes.addFlashAttribute("success", "You have been logged out");
             }
-            return "redirect:/login";
+            return "redirect:" + Urls.LOGIN;
         }
 }

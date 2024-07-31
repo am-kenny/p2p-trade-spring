@@ -1,5 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.presentation.controller;
 
+import com.mycompany.p2pTradeSpringProject.constants.Urls;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
 import com.mycompany.p2pTradeSpringProject.service.UserVerificationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/profile")
+@RequestMapping(Urls.PROFILE)
 @AllArgsConstructor
 public class ProfileController {
 
@@ -20,7 +21,7 @@ public class ProfileController {
     public String profile(HttpServletRequest request,
                           Model model) { //TODO: Check Model vs ModelAndView
         if (request.getSession().getAttribute("authenticatedUser") == null) {
-            return "redirect:/login"; // Redirect to login page if user is not authenticated
+            return "redirect:" + Urls.LOGIN; // Redirect to login page if user is not authenticated
         }
 
         User user = (User) request.getSession().getAttribute("authenticatedUser");
