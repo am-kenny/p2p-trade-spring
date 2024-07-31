@@ -36,7 +36,7 @@ public class UserVerificationImpl implements IDAOUserVerification {
     }
 
     @Override
-    public void update(UserVerification userVerification, String[] params) {
+    public void update(UserVerification userVerification) {
         userVerificationRepository.save(userVerification);
     }
 

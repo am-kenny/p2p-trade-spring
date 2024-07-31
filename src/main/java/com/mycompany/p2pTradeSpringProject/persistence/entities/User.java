@@ -1,9 +1,9 @@
 package com.mycompany.p2pTradeSpringProject.persistence.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.Instant;
@@ -13,6 +13,9 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "user", uniqueConstraints = {
         @UniqueConstraint(name = "user_verification_unique", columnNames = {"user_verification_id"})
@@ -36,15 +39,18 @@ public class User {
     @JoinColumn(name = "user_verification_id")
     private UserVerification userVerification;
 
+    @CreationTimestamp
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorUser")
     private Set<TradeFeedback> tradeFeedbacks = new LinkedHashSet<>();
 
+    @Generated
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "user_type_id", nullable = false)
+    @ColumnDefault("1")
+    @JoinColumn(name = "user_type_id", insertable = false, nullable = false)
     private UserType userType;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)

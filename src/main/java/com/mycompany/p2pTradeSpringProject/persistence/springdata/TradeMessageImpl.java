@@ -36,7 +36,7 @@ public class TradeMessageImpl implements IDAOMessage {
     }
 
     @Override
-    public void update(TradeMessage tradeMessage, String[] params) {
+    public void update(TradeMessage tradeMessage) {
         tradeMessageRepository.save(tradeMessage);
     }
 

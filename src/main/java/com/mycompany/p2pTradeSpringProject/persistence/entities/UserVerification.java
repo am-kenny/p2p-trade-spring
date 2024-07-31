@@ -1,7 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.persistence.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -13,30 +12,26 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "user_verification")
-public class UserVerification {
+public class UserVerification { //TODO: Add verification status (approved, rejected, pending)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @NotBlank
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotBlank
     @Column(name = "surname", nullable = false)
     private String surname;
 
-    @NotBlank
     @Column(name = "passport_number", nullable = false)
     private String passportNumber;
 
-    @NotBlank
     @Column(name = "passport_photo_reference", nullable = false)
     private String passportPhotoReference;
 
     @ColumnDefault("0")
-    @Column(name = "is_banned", nullable = false)
+    @Column(name = "is_banned", insertable = false, nullable = false)
     private Boolean isBanned = false;
 
     @Override

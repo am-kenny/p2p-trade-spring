@@ -36,7 +36,7 @@ public class CurrencyImpl implements IDAOCurrency {
     }
 
     @Override
-    public void update(Currency currency, String[] params) {
+    public void update(Currency currency) {
         currencyRepository.save(currency);
     }
 

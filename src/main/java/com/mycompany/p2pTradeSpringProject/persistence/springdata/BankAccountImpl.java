@@ -36,7 +36,7 @@ public class BankAccountImpl implements IDAOBankAccount {
     }
 
     @Override
-    public void update(BankAccount bankAccount, String[] params) {
+    public void update(BankAccount bankAccount) {
         bankAccountRepository.save(bankAccount);
     }
 

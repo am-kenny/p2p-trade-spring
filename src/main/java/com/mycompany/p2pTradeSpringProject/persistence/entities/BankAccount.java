@@ -40,7 +40,6 @@ public class BankAccount {
     @JoinColumn(name = "currency_id", nullable = false)
     private Currency currency;
 
-    @NotBlank
     @Column(name = "cardholder_name", nullable = false, length = 45)
     private String cardholderName;
 

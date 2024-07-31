@@ -36,7 +36,7 @@ public class TradeFeedbackImpl implements IDAOFeedback {
     }
 
     @Override
-    public void update(TradeFeedback tradeFeedback, String[] params) {
+    public void update(TradeFeedback tradeFeedback) {
 
     }
 

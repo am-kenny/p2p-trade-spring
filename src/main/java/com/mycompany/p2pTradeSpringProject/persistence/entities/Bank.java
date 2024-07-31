@@ -27,7 +27,6 @@ public class Bank {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @NotBlank
     @Column(name = "name", nullable = false, length = 45)
     private String name;
 

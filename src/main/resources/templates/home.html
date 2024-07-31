@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome!</h1>
+    <div th:if="${session.authenticatedUser != null}">
+        <div th:text="${session.authenticatedUser.username}"></div>
+    </div>
+
+    <div th:if="${session.authenticatedUser == null}">
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+    </div>
+    <div th:if="${session.authenticatedUser != null}">
+        <a href="/profile">Profile</a>
+    </div>
+    <a href="/simple">Simple</a>
+</body>
+</html>

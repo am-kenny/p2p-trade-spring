@@ -36,7 +36,7 @@ public class UserTypeImpl implements IDAOUserType {
     }
 
     @Override
-    public void update(UserType userType, String[] params) {
+    public void update(UserType userType) {
         userTypeRepository.save(userType);
     }
 

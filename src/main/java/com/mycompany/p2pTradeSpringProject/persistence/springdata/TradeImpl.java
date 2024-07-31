@@ -36,7 +36,7 @@ public class TradeImpl implements IDAOTrade {
     }
 
     @Override
-    public void update(Trade trade, String[] params) {
+    public void update(Trade trade) {
         tradeRepository.save(trade);
     }
 

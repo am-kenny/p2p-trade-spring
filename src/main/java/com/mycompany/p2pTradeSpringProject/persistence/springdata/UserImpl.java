@@ -41,7 +41,7 @@ public class UserImpl implements IDAOUser {
     }
 
     @Override
-    public void update(User user, String[] params) {
+    public void update(User user) {
         userRepository.save(user);
     }
 

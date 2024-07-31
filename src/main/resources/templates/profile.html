@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+<h1>Welcome, <span th:text="${session.authenticatedUser.username}"></span>!</h1>
+<h2>Your data:</h2>
+<div>
+    <p>Email: <span th:text="${session.authenticatedUser.email}"></span></p>
+
+    <div th:if="${isVerified}">
+        <p>Verification: Your profile is verified!</p>
+    </div>
+    <div th:unless="${isVerified}">
+        <p>Verification: Your profile is not verified!</p>
+        <a href="/verify">Verify</a>
+    </div>
+
+</div>
+<div>
+    <a href="/logout">Logout</a>
+</div>
+
+</body>
+</html>
