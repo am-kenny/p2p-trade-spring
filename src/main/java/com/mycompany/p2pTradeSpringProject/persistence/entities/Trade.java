@@ -1,8 +1,7 @@
 package com.mycompany.p2pTradeSpringProject.persistence.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -14,6 +13,9 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "trade", indexes = {
         @Index(name = "fk_trade_initiator_idx", columnList = "initiator_user_id"),
