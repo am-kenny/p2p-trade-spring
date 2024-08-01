@@ -1,5 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
+import com.mycompany.p2pTradeSpringProject.dto.VerificationRequest;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUser;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUserVerification;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
@@ -21,13 +22,10 @@ public class UserVerificationService {
     @Transactional(readOnly = true)
     public boolean isVerified(int id) {
         Optional<User> user = daoUser.findById(id);
-        if (user.isEmpty()) {
-            return false;
-        }
-        return daoUser.findById(id).get().getUserVerification() != null;
+        return user.filter(value -> value.getUserVerification() != null).isPresent();
     }
 
-    public void verifyUser(int id, UserVerification userVerification) {
+    public void verifyUser(int id, VerificationRequest verificationRequest) {
         Optional<User> userOptional = daoUser.findById(id);
         if (userOptional.isEmpty()) {
             throw new IllegalArgumentException("User with id " + id + " not found");
@@ -37,6 +35,13 @@ public class UserVerificationService {
         if (user.getUserVerification() != null) {
             throw new IllegalArgumentException("User with id " + id + " is already verified");
         }
+
+        UserVerification userVerification = UserVerification.builder()
+                .name(verificationRequest.getName())
+                .surname(verificationRequest.getSurname())
+                .passportNumber(verificationRequest.getPassportNumber())
+                .passportPhotoReference(verificationRequest.getPassportPhotoReference())
+                .build();
 
         daoUserVerification.create(userVerification);
         user.setUserVerification(userVerification);

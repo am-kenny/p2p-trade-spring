@@ -1,8 +1,7 @@
 package com.mycompany.p2pTradeSpringProject.persistence.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -10,6 +9,9 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "user_verification")
 public class UserVerification { //TODO: Add verification status (approved, rejected, pending)
