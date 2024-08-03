@@ -1,58 +1,92 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
-import com.mycompany.p2pTradeSpringProject.dto.CreateTradeRequest;
-import com.mycompany.p2pTradeSpringProject.dto.GetTradesRequest;
-import com.mycompany.p2pTradeSpringProject.dto.GetTradesResponse;
+import com.mycompany.p2pTradeSpringProject.dto.*;
+import com.mycompany.p2pTradeSpringProject.dto.Error;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOTrade;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.Currency;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.Trade;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
+import com.mycompany.p2pTradeSpringProject.utils.CurrencyMapper;
+import com.mycompany.p2pTradeSpringProject.utils.TradeMapper;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
 @AllArgsConstructor
 public class TradeService {
 
+    private final Validator validator;
+
     private final IDAOTrade daoTrade;
 
-    public void createTrade(CreateTradeRequest request) {
+    public CreateTradeResponse createTrade(CreateTradeRequest request) {
 
-        Trade trade = Trade.builder()
-                .initiatorUser(request.getUser())
-                .isSeller(request.getIsSeller())
-                .tradeCurrency(request.getTradeCurrency())
-                .tradeCurrencyAmount(request.getAmount())
-                .exchangeCurrency(request.getExchangeCurrency())
-                .exchangeRate(request.getExchangeRate())
+        Set<ConstraintViolation<CreateTradeRequest>> violations = validator.validate(request);
+
+        if (!violations.isEmpty()) {
+            return CreateTradeResponse.builder()
+                    .success(false)
+                    .errors(violations.stream()
+                            .map(violation -> Error.builder()
+                                    .message(violation.getMessage())
+                                    .build())
+                            .toList())
+                    .build();
+        }
+
+        Trade trade = TradeMapper.toEntity(request);
+        Integer tradeId = daoTrade.create(trade);
+
+        return CreateTradeResponse.builder()
+                .success(true)
+                .tradeId(tradeId)
                 .build();
-
-        daoTrade.create(trade);
     }
 
-    public Trade getTradeById(int id) {
-        return daoTrade.findById(id).orElse(null);
+    @Transactional(readOnly = true)
+    public OpenTradeDto getOpenTradeById(int id) {
+        return TradeMapper.mapToOpenTradeDto(
+                daoTrade.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("Trade not found"))
+        );
     }
 
-    public List<Trade> getTrades(GetTradesRequest request) {
+    @Transactional(readOnly = true)
+    public GetOpenTradesResponse getOpenTrades(GetOpenTradesRequest request) { //TODO: Filter only open trades
+
+        List<OpenTradeDto> openTradeList;
+
         if (request.getBuy() != null && request.getTradeCurrency() != null) {
-            return daoTrade.findByCurrencyAndIsSeller(request.getTradeCurrency(), request.getBuy());
-        }
-        if (request.getBuy() != null) {
-            return daoTrade.findByIsSeller(request.getBuy());
-        }
-        if (request.getTradeCurrency() != null) {
-            return daoTrade.findByCurrency(request.getTradeCurrency());
+            openTradeList = daoTrade.findByCurrencyAndIsSeller(CurrencyMapper.toEntity(request.getTradeCurrency()), request.getBuy())
+                    .stream()
+                    .map(TradeMapper::mapToOpenTradeDto)
+                    .toList();
+        } else if (request.getBuy() != null) {
+            openTradeList = daoTrade.findByIsSeller(request.getBuy())
+                    .stream()
+                    .map(TradeMapper::mapToOpenTradeDto)
+                    .toList();
+
+        } else if (request.getTradeCurrency() != null) {
+            openTradeList = daoTrade.findByCurrency(CurrencyMapper.toEntity(request.getTradeCurrency()))
+                    .stream()
+                    .map(TradeMapper::mapToOpenTradeDto)
+                    .toList();
+        } else { //TODO: Complete with exchange currency
+            openTradeList = daoTrade.findAll()
+                    .stream()
+                    .map(TradeMapper::mapToOpenTradeDto)
+                    .toList();
         }
 
-        //TODO: Complete with exchange currency
-
-
-        return daoTrade.findAll();
+        return GetOpenTradesResponse.builder()
+                .openTrades(openTradeList)
+                .build();
     }
 
 }

@@ -31,8 +31,8 @@ public class TradeMessageImpl implements IDAOMessage {
     }
 
     @Override
-    public void create(TradeMessage tradeMessage) {
-        tradeMessageRepository.save(tradeMessage);
+    public Integer create(TradeMessage tradeMessage) {
+        return tradeMessageRepository.save(tradeMessage).getId();
     }
 
     @Override

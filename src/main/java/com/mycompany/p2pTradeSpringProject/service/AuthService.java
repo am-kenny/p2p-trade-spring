@@ -5,6 +5,7 @@ import com.mycompany.p2pTradeSpringProject.dto.RegistrationRequest;
 import com.mycompany.p2pTradeSpringProject.exception.BadCredentialsException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUser;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
+import com.mycompany.p2pTradeSpringProject.utils.UserMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,7 @@ public class AuthService {
     }
 
     public void register(RegistrationRequest request) {
-        User user = User.builder()
-                .username(request.getUsername())
-                .password(request.getPassword())
-                .email(request.getEmail())
-                .build();
+        User user = UserMapper.toEntity(request);
         daoUser.create(user);
     }
 }

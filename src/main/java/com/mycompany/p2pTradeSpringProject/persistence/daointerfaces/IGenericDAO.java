@@ -11,7 +11,7 @@ public interface IGenericDAO<T> {
 
     List<T> findAll(int maxResults, int firstResult);
 
-    void create(T t);
+    Integer create(T t);
 
     void update(T t);
 

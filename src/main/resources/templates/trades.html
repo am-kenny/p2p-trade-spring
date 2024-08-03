@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trades</title>
+</head>
+<body>
+    <h1>Trades</h1>
+    <a href="/trades/create">Create new trade</a>
+    <table>
+        <tr>
+            <th>Trade ID</th>
+            <th>Initiator</th>
+            <th>Sells/Buys</th>
+            <th>Currency 1</th>
+            <th>Amount</th>
+            <th>Currency 2</th>
+            <th>Exchange rate</th>
+            <th>Created at</th>
+            <th>Go to</th>
+        </tr>
+        <tr th:each="trade : ${trades}">
+            <td th:text="${trade.id}"></td>
+            <td th:text="${trade.initiatorUser.username}"></td>
+            <td th:text="${trade.isSeller}"></td>
+            <td th:text="${trade.tradeCurrency.name}"></td>
+            <td th:text="${trade.tradeCurrencyAmount}"></td>
+            <td th:text="${trade.exchangeCurrency.name}"></td>
+            <td th:text="${trade.exchangeRate}"></td>
+            <td th:text="${trade.createdAt.toString()}"></td>
+            <td><a th:href="@{'/trades/' + ${trade.id}}">Go to</a></td>
+        </tr>
+    </table>
+</body>
+</html>

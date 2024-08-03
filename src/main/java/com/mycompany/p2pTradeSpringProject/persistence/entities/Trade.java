@@ -53,20 +53,20 @@ public class Trade {
 
     @ColumnDefault("'open'")
     @Lob
-    @Column(name = "status", nullable = false)
+    @Column(name = "status", insertable = false, nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @ColumnDefault("0")
-    @Column(name = "is_confirmed_by_initiator", nullable = false)
+    @Column(name = "is_confirmed_by_initiator", insertable = false, nullable = false)
     private Boolean isConfirmedByInitiator = false;
 
     @ColumnDefault("0")
-    @Column(name = "is_confirmed_by_responder", nullable = false)
+    @Column(name = "is_confirmed_by_responder", insertable = false, nullable = false)
     private Boolean isConfirmedByResponder = false;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", insertable = false, nullable = false)
     private Instant createdAt;
 
     @Column(name = "replied_at")

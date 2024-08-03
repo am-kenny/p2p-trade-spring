@@ -7,5 +7,6 @@ public class Urls {
     public static final String HOME = "/home";
     public static final String VERIFY = "/verify";
     public static final String PROFILE = "/profile";
+    public static final String TRADES = "/trades";
 
 }

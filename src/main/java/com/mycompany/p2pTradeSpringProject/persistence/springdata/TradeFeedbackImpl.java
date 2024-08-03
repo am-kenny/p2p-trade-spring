@@ -31,18 +31,18 @@ public class TradeFeedbackImpl implements IDAOFeedback {
     }
 
     @Override
-    public void create(TradeFeedback tradeFeedback) {
-
+    public Integer create(TradeFeedback tradeFeedback) {
+        return tradeFeedbackRepository.save(tradeFeedback).getId();
     }
 
     @Override
     public void update(TradeFeedback tradeFeedback) {
-
+        tradeFeedbackRepository.save(tradeFeedback);
     }
 
     @Override
     public void delete(TradeFeedback tradeFeedback) {
-
+        tradeFeedbackRepository.delete(tradeFeedback);
     }
 
     @Override

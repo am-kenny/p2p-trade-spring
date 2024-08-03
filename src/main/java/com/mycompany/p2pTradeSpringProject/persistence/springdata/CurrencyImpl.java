@@ -31,8 +31,8 @@ public class CurrencyImpl implements IDAOCurrency {
     }
 
     @Override
-    public void create(Currency currency) {
-        currencyRepository.save(currency);
+    public Integer create(Currency currency) {
+        return currencyRepository.save(currency).getId();
     }
 
     @Override

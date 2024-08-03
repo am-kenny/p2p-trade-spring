@@ -1,12 +1,12 @@
 package com.mycompany.p2pTradeSpringProject.dto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 @Builder
 public class RegistrationRequest {
-    private String username;
-    private String password;
-    private String email;
+    String username;
+    String password;
+    String email;
 }

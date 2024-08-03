@@ -31,8 +31,8 @@ public class BankAccountImpl implements IDAOBankAccount {
     }
 
     @Override
-    public void create(BankAccount bankAccount) {
-        bankAccountRepository.save(bankAccount);
+    public Integer create(BankAccount bankAccount) {
+        return bankAccountRepository.save(bankAccount).getId();
     }
 
     @Override

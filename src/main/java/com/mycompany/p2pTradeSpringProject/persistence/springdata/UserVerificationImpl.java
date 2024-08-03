@@ -31,8 +31,8 @@ public class UserVerificationImpl implements IDAOUserVerification {
     }
 
     @Override
-    public void create(UserVerification userVerification) {
-        userVerificationRepository.save(userVerification);
+    public Integer create(UserVerification userVerification) {
+        return userVerificationRepository.save(userVerification).getId();
     }
 
     @Override

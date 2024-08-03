@@ -5,7 +5,6 @@ import lombok.Value;
 
 @Value
 @Builder
-public class LoginRequest {
-    String username;
-    String password;
+public class Error {
+    String message;
 }

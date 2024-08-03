@@ -32,8 +32,8 @@ public class TradeImpl implements IDAOTrade {
     }
 
     @Override
-    public void create(Trade trade) {
-        tradeRepository.save(trade);
+    public Integer create(Trade trade) {
+        return tradeRepository.save(trade).getId();
     }
 
     @Override

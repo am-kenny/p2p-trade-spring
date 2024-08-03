@@ -36,8 +36,8 @@ public class UserImpl implements IDAOUser {
     }
 
     @Override
-    public void create(User user) {
-        userRepository.save(user);
+    public Integer create(User user) {
+        return userRepository.save(user).getId();
     }
 
     @Override

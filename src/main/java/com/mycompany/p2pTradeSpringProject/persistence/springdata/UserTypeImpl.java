@@ -31,8 +31,8 @@ public class UserTypeImpl implements IDAOUserType {
     }
 
     @Override
-    public void create(UserType userType) {
-        userTypeRepository.save(userType);
+    public Integer create(UserType userType) {
+        return userTypeRepository.save(userType).getId();
     }
 
     @Override
