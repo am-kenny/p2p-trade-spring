@@ -31,6 +31,4 @@ public class TradeSpecifications {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(Trade_.RESPONDER_USER).get("id"), userId);
     }
 
-
-
 }

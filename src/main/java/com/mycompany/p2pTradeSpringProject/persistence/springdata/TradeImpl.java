@@ -1,10 +1,10 @@
 package com.mycompany.p2pTradeSpringProject.persistence.springdata;
 
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOTrade;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.Currency;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.Trade;
 import com.mycompany.p2pTradeSpringProject.persistence.repositories.TradeRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,6 +24,11 @@ public class TradeImpl implements IDAOTrade {
     @Override
     public List<Trade> findAll() {
         return tradeRepository.findAll();
+    }
+
+    @Override
+    public List<Trade> findAll(Specification<Trade> specification) {
+        return tradeRepository.findAll(specification);
     }
 
     @Override
@@ -51,18 +56,4 @@ public class TradeImpl implements IDAOTrade {
         return tradeRepository.count();
     }
 
-    @Override
-    public List<Trade> findByCurrency(Currency currency) {
-        return tradeRepository.findByTradeCurrency(currency);
-    }
-
-    @Override
-    public List<Trade> findByIsSeller(Boolean isSeller) {
-        return tradeRepository.findByIsSeller(isSeller);
-    }
-
-    @Override
-    public List<Trade> findByCurrencyAndIsSeller(Currency currency, Boolean isSeller) {
-        return tradeRepository.findByTradeCurrencyAndIsSeller(currency, isSeller);
-    }
 }
