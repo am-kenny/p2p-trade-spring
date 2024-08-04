@@ -7,7 +7,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.Instant;
-import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -45,7 +44,7 @@ public class User {
     private Instant createdAt;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorUser")
-    private Set<TradeFeedback> tradeFeedbacks = new LinkedHashSet<>();
+    private Set<TradeFeedback> tradeFeedbacks;
 
     @Generated
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -54,7 +53,7 @@ public class User {
     private UserType userType;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
-    private Set<BankAccount> bankAccounts = new LinkedHashSet<>();
+    private Set<BankAccount> bankAccounts;
 
     @Override
     public final boolean equals(Object o) {

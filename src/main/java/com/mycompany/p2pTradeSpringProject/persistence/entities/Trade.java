@@ -6,7 +6,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.Instant;
-import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -36,7 +35,7 @@ public class Trade {
     private User responderUser;
 
     @Column(name = "is_seller", nullable = false)
-    private Boolean isSeller = false;
+    private Boolean isSeller;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Currency tradeCurrency;
@@ -59,11 +58,11 @@ public class Trade {
 
     @ColumnDefault("0")
     @Column(name = "is_confirmed_by_initiator", insertable = false, nullable = false)
-    private Boolean isConfirmedByInitiator = false;
+    private Boolean isConfirmedByInitiator;
 
     @ColumnDefault("0")
     @Column(name = "is_confirmed_by_responder", insertable = false, nullable = false)
-    private Boolean isConfirmedByResponder = false;
+    private Boolean isConfirmedByResponder;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", insertable = false, nullable = false)
@@ -76,10 +75,10 @@ public class Trade {
     private Instant closedAt;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trade")
-    private Set<TradeFeedback> tradeFeedbacks = new LinkedHashSet<>();
+    private Set<TradeFeedback> tradeFeedbacks;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trade")
-    private Set<TradeMessage> tradeMessages = new LinkedHashSet<>();
+    private Set<TradeMessage> tradeMessages;
 
     @Override
     public final boolean equals(Object o) {

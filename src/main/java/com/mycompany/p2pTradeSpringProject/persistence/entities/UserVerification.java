@@ -34,7 +34,7 @@ public class UserVerification { //TODO: Add verification status (approved, rejec
 
     @ColumnDefault("0")
     @Column(name = "is_banned", insertable = false, nullable = false)
-    private Boolean isBanned = false;
+    private Boolean isBanned;
 
     @Override
     public final boolean equals(Object o) {
