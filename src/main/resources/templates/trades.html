@@ -7,6 +7,21 @@
 <body>
     <h1>Trades</h1>
     <a href="/trades/create">Create new trade</a>
+
+    <form action="/trades" method="get">
+        <label for="tradeCurrencyId">Trade currency</label>
+        <select name="tradeCurrencyId" id="tradeCurrencyId">
+            <option value="">All</option>
+            <option th:each="currency : ${currencies}" th:value="${currency.id}" th:text="${currency.name}"></option>
+        </select>
+        <label for="exchangeCurrencyId">Exchange currency</label>
+        <select name="exchangeCurrencyId" id="exchangeCurrencyId">
+            <option value="">All</option>
+            <option th:each="currency : ${currencies}" th:value="${currency.id}" th:text="${currency.name}"></option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
     <table>
         <tr>
             <th>Trade ID</th>

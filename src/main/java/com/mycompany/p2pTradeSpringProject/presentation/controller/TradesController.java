@@ -23,20 +23,6 @@ public class TradesController {
     private final TradeService tradeService;
     private final CurrencyService currencyService;
 
-    @GetMapping()
-    public String getOpenTrades(GetOpenTradesRequest tradesRequest,
-                                HttpServletRequest request,
-                                Model model) {
-
-        if (request.getSession().getAttribute("authenticatedUser") == null) {
-            return "redirect:" + Urls.LOGIN; // Redirect to home page if user is already authenticated
-        }
-
-        GetOpenTradesResponse trades = tradeService.getOpenTrades(tradesRequest);
-        model.addAttribute("trades", trades.getOpenTrades());
-        return "trades";
-    }
-
     @GetMapping("/{id}")
     public String getOpenTrade(@PathVariable int id,
                                HttpServletRequest request,
@@ -50,6 +36,23 @@ public class TradesController {
         model.addAttribute("trade", tradeService.getOpenTradeById(id));
 
         return "trade";
+    }
+
+    @GetMapping()
+    public String getOpenTrades(GetOpenTradesRequest tradesRequest,
+                                HttpServletRequest request,
+                                Model model) {
+
+        if (request.getSession().getAttribute("authenticatedUser") == null) {
+            return "redirect:" + Urls.LOGIN; // Redirect to home page if user is already authenticated
+        }
+
+
+
+        GetOpenTradesResponse getOpenTradesResponse = tradeService.getOpenTrades(tradesRequest);
+        model.addAttribute("trades", getOpenTradesResponse.getOpenTrades());
+        model.addAttribute("currencies", getOpenTradesResponse.getCurrencies());
+        return "trades";
     }
 
 

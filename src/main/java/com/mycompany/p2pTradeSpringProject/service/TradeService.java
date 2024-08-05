@@ -14,9 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
-import static com.mycompany.p2pTradeSpringProject.persistence.repositories.specifications.TradeSpecifications.isOpen;
-import static com.mycompany.p2pTradeSpringProject.persistence.repositories.specifications.TradeSpecifications.tradeCurrencyId;
+import static com.mycompany.p2pTradeSpringProject.persistence.repositories.specifications.TradeSpecifications.*;
 
 @Service
 @Transactional
@@ -26,6 +26,8 @@ public class TradeService {
     private final Validator validator;
 
     private final IDAOTrade daoTrade;
+
+    private final CurrencyService currencyService;
 
     public CreateTradeResponse createTrade(CreateTradeRequest request) {
 
@@ -62,17 +64,19 @@ public class TradeService {
     @Transactional(readOnly = true)
     public GetOpenTradesResponse getOpenTrades(GetOpenTradesRequest request) { //TODO: Filter only open trades
 
+        Logger.getGlobal().info("GetOpenTradesRequest: " + "getBuy:" + request.getBuy() + " tradeCurrencyId:" + request.getTradeCurrencyId() + " exchangeCurrencyId:" + request.getExchangeCurrencyId());
+
         List<OpenTradeDto> openTradeList;
         Specification<Trade> specification = isOpen();
 
         if (request.getBuy() != null) {
-            specification = specification.and(tradeCurrencyId(request.getTradeCurrency().getId()));
+            specification = specification.and(isSeller(request.getBuy()));
         }
-        if (request.getTradeCurrency() != null) {
-            specification = specification.and(tradeCurrencyId(request.getTradeCurrency().getId()));
+        if (request.getTradeCurrencyId() != null) {
+            specification = specification.and(tradeCurrencyId(request.getTradeCurrencyId()));
         }
-        if (request.getExchangeCurrency() != null) {
-            specification = specification.and(tradeCurrencyId(request.getExchangeCurrency().getId()));
+        if (request.getExchangeCurrencyId() != null) {
+            specification = specification.and(exchangeCurrencyId(request.getExchangeCurrencyId()));
         }
 
         openTradeList = daoTrade.findAll(specification)
@@ -80,8 +84,11 @@ public class TradeService {
                 .map(TradeMapper::mapToOpenTradeDto)
                 .toList();
 
+        List<CurrencyDto> currencies = currencyService.getAllCurrencies();
+
         return GetOpenTradesResponse.builder()
                 .openTrades(openTradeList)
+                .currencies(currencies)
                 .build();
     }
 

@@ -9,5 +9,6 @@ import java.util.List;
 @Builder
 public class GetOpenTradesResponse {
     List<OpenTradeDto> openTrades;
+    List<CurrencyDto> currencies;
     List<Error> errors;
 }

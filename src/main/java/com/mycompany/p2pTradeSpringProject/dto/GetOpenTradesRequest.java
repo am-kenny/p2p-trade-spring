@@ -9,6 +9,6 @@ import lombok.Getter;
 @Getter
 public class GetOpenTradesRequest {
     private Boolean buy;
-    private CurrencyDto tradeCurrency;
-    private CurrencyDto exchangeCurrency;
+    private Integer tradeCurrencyId;
+    private Integer exchangeCurrencyId;
 }
