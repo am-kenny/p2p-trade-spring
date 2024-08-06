@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
 </head>
 <body>
-    <h1>Welcome!</h1>
+    <h1>Welcome <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
     <div th:if="${session.authenticatedUser != null}">
         <div th:text="${session.authenticatedUser.username}"></div>
     </div>

@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface IDAOUser extends IGenericDAO<User> {
     Optional<User> findByUsernamePassword(String username, String password);
+
+    Optional<User> findByUsername(String username);
 }

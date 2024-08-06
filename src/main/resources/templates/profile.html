@@ -5,10 +5,10 @@
     <title>Profile</title>
 </head>
 <body>
-<h1>Welcome, <span th:text="${session.authenticatedUser.username}"></span>!</h1>
+<h1>Welcome, <span th:text="${authenticatedUser.username}"></span>!</h1>
 <h2>Your data:</h2>
 <div>
-    <p>Email: <span th:text="${session.authenticatedUser.email}"></span></p>
+    <p>Email: <span th:text="${authenticatedUser.email}"></span></p>
 
     <div th:if="${isVerified}">
         <p>Verification: Your profile is verified!</p>

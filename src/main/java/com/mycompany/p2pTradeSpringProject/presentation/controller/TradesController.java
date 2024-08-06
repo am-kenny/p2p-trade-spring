@@ -5,7 +5,6 @@ import com.mycompany.p2pTradeSpringProject.dto.*;
 import com.mycompany.p2pTradeSpringProject.dto.Error;
 import com.mycompany.p2pTradeSpringProject.service.CurrencyService;
 import com.mycompany.p2pTradeSpringProject.service.TradeService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,12 +24,7 @@ public class TradesController {
 
     @GetMapping("/{id}")
     public String getOpenTrade(@PathVariable int id,
-                               HttpServletRequest request,
                                Model model) {
-        if (request.getSession().getAttribute(
-                "authenticatedUser") == null) {
-            return "redirect:" + Urls.LOGIN; // Redirect to home page if user is already authenticated
-        }
 
         tradeService.getOpenTradeById(id);
         model.addAttribute("trade", tradeService.getOpenTradeById(id));
@@ -40,14 +34,7 @@ public class TradesController {
 
     @GetMapping()
     public String getOpenTrades(GetOpenTradesRequest tradesRequest,
-                                HttpServletRequest request,
                                 Model model) {
-
-        if (request.getSession().getAttribute("authenticatedUser") == null) {
-            return "redirect:" + Urls.LOGIN; // Redirect to home page if user is already authenticated
-        }
-
-
 
         GetOpenTradesResponse getOpenTradesResponse = tradeService.getOpenTrades(tradesRequest);
         model.addAttribute("trades", getOpenTradesResponse.getOpenTrades());
@@ -57,12 +44,8 @@ public class TradesController {
 
 
     @GetMapping("/create")
-    public String createTrade(HttpServletRequest request,
-                              Model model,
+    public String createTrade(Model model,
                               @ModelAttribute("errors") ArrayList<Error> errors) {
-        if (request.getSession().getAttribute("authenticatedUser") == null) {
-            return "redirect:" + Urls.LOGIN; // Redirect to home page if user is already authenticated
-        }
 
         List<CurrencyDto> currencies = currencyService.getAllCurrencies();
         model.addAttribute("currencies", currencies);
@@ -72,11 +55,7 @@ public class TradesController {
 
     @PostMapping()
     public String createTrade(CreateTradeRequest createTradeRequest,
-                              HttpServletRequest request,
                               RedirectAttributes redirectAttributes) {
-        if (request.getSession().getAttribute("authenticatedUser") == null) {
-            return "redirect:" + Urls.LOGIN; // Redirect to home page if user is already authenticated
-        }
 
         CreateTradeResponse response = tradeService.createTrade(createTradeRequest); //TODO: add exception handling
 

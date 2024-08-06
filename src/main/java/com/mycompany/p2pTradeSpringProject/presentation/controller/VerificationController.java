@@ -23,19 +23,13 @@ public class VerificationController {
     private final UserVerificationService userVerificationService;
 
     @GetMapping
-    public String verify(HttpServletRequest request) {
-        if (request.getSession().getAttribute("authenticatedUser") == null) {
-            return "redirect:" + Urls.LOGIN; // Redirect to login page if user is not authenticated
-        }
+    public String verify() {
         return "verify";
     }
 
     @PostMapping
     public String verifyPost(VerificationRequest verificationRequest,
-                             HttpServletRequest request) {
-        if (request.getSession().getAttribute("authenticatedUser") == null) {
-            return "redirect:" + Urls.LOGIN; // Redirect to login page if user is not authenticated
-        }
+                             HttpServletRequest request) { //TODO: Remove HttpServletRequest and use a more appropriate method to get the authenticated user
 
         try {
             //save photo file locally
