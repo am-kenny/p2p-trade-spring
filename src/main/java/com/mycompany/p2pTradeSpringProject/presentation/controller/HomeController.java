@@ -10,13 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class HomeController {
 
-    @RequestMapping("/")
-    public String index() {
-        return "redirect:" + Urls.HOME;
-    }
-
-    @RequestMapping(Urls.HOME)
+    @RequestMapping({Urls.HOME, Urls.ROOT})
     public String home() {
         return "home";
     }
+
 }
