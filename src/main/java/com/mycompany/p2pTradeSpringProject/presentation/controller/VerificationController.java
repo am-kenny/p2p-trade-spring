@@ -3,9 +3,10 @@ package com.mycompany.p2pTradeSpringProject.presentation.controller;
 import com.mycompany.p2pTradeSpringProject.constants.Urls;
 import com.mycompany.p2pTradeSpringProject.dto.VerificationRequest;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
+import com.mycompany.p2pTradeSpringProject.security.MyUserDetails;
 import com.mycompany.p2pTradeSpringProject.service.UserVerificationService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,7 @@ public class VerificationController {
 
     @PostMapping
     public String verifyPost(VerificationRequest verificationRequest,
-                             HttpServletRequest request) { //TODO: Remove HttpServletRequest and use a more appropriate method to get the authenticated user
+                             @AuthenticationPrincipal MyUserDetails userDetails) {
 
         try {
             //save photo file locally
@@ -40,7 +41,7 @@ public class VerificationController {
 
             verificationRequest.setPassportPhotoReference("passport_images/" + passportPhoto.getOriginalFilename());
 
-            User user = (User) request.getSession().getAttribute("authenticatedUser");
+            User user = userDetails.getUser();
             userVerificationService.verifyUser(user.getId(), verificationRequest);
         } catch (IOException e) {
             return "redirect:" + Urls.VERIFY; // Redirect back to verify page on failure

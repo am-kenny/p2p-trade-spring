@@ -4,9 +4,8 @@ import com.mycompany.p2pTradeSpringProject.constants.Urls;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
 import com.mycompany.p2pTradeSpringProject.security.MyUserDetails;
 import com.mycompany.p2pTradeSpringProject.service.UserVerificationService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,19 +19,14 @@ public class ProfileController {
     private final UserVerificationService userVerificationService;
 
     @GetMapping
-    public String profile(HttpServletRequest request, //TODO: remove HttpServletRequest
+    public String profile(@AuthenticationPrincipal MyUserDetails userDetails,
                           Model model) { //TODO: Check Model vs ModelAndView
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userDetails.getUser();
 
-        if (principal instanceof MyUserDetails) {
-            User user = ((MyUserDetails) principal).getUser();
+        model.addAttribute("authenticatedUser", user);
+        model.addAttribute("isVerified", userVerificationService.isVerified(user.getId()));
+        return "profile";
 
-            model.addAttribute("authenticatedUser", user);
-            model.addAttribute("isVerified", userVerificationService.isVerified(user.getId()));
-            return "profile";
-        }
-
-        return "redirect:" + Urls.LOGIN;
     }
 }
