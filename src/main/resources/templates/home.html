@@ -6,15 +6,12 @@
 </head>
 <body>
     <h1>Welcome <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
-    <div th:if="${session.authenticatedUser != null}">
-        <div th:text="${session.authenticatedUser.username}"></div>
-    </div>
 
-    <div th:if="${session.authenticatedUser == null}">
+    <div sec:authorize="isAnonymous()">
         <a href="/login">Login</a>
         <a href="/register">Register</a>
     </div>
-    <div th:if="${session.authenticatedUser != null}">
+    <div sec:authorize="isAuthenticated()">
         <a href="/profile">Profile</a>
         <a href="/trades">Trades</a>
     </div>
