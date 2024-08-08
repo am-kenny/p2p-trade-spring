@@ -7,7 +7,8 @@
 <body>
 <h1>New trade</h1>
 <form action="/trades" method="post">
-    <input type="hidden" id="userId" name="userId" th:value="${session.authenticatedUser.id}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <input type="hidden" id="userId" name="userId" th:value="${session.authenticatedUser.id}"> <!-- TODO: change to spring security user -->
     <label for="isSeller">Sell</label>
     <input type="radio" id="isSeller" name="isSeller" value="true">
     <label for="isBuyer">Buy</label>
