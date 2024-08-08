@@ -5,6 +5,7 @@ import com.mycompany.p2pTradeSpringProject.dto.Error;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOTrade;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.Trade;
 import com.mycompany.p2pTradeSpringProject.utils.TradeMapper;
+import com.mycompany.p2pTradeSpringProject.utils.UserMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class TradeService {
 
     private final CurrencyService currencyService;
 
-    public CreateTradeResponse createTrade(CreateTradeRequest request) {
+    public CreateTradeResponse createTrade(CreateTradeRequest request, Integer userId) {
 
         Set<ConstraintViolation<CreateTradeRequest>> violations = validator.validate(request);
 
@@ -45,6 +46,7 @@ public class TradeService {
         }
 
         Trade trade = TradeMapper.toEntity(request);
+        trade.setInitiatorUser(UserMapper.toEntity(userId));
         Integer tradeId = daoTrade.create(trade);
 
         return CreateTradeResponse.builder()

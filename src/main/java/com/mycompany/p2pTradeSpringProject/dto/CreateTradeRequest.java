@@ -9,8 +9,6 @@ import lombok.Value;
 @Value
 @Builder
 public class CreateTradeRequest {
-    @NotNull(message = "User is required")
-    Integer userId;
 
     @NotNull(message = "You should specify if you want to sell or buy")
     Boolean isSeller;

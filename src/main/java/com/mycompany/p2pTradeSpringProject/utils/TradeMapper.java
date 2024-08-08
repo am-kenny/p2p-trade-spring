@@ -20,7 +20,6 @@ public class TradeMapper {
 
     public static Trade toEntity(CreateTradeRequest request) {
         return Trade.builder()
-                .initiatorUser(UserMapper.toEntity(request.getUserId()))
                 .isSeller(request.getIsSeller())
                 .tradeCurrency(CurrencyMapper.toEntity(request.getTradeCurrencyId()))
                 .tradeCurrencyAmount(request.getAmount())
