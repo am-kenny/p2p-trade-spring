@@ -24,13 +24,26 @@ public class VerificationController {
     private final UserVerificationService userVerificationService;
 
     @GetMapping
-    public String verify() {
+    public String verify(@AuthenticationPrincipal MyUserDetails userDetails) {
+
+        boolean isVerified = userVerificationService.isVerified(userDetails.getUser().getId());
+
+        if (isVerified) {
+            return "redirect:" + Urls.PROFILE; // Redirect to profile page if user is already verified
+        }
+
         return "verify";
     }
 
     @PostMapping
     public String verifyPost(VerificationRequest verificationRequest,
                              @AuthenticationPrincipal MyUserDetails userDetails) {
+
+        boolean isVerified = userVerificationService.isVerified(userDetails.getUser().getId());
+
+        if (isVerified) {
+            return "redirect:" + Urls.PROFILE; // Redirect to profile page if user is already verified
+        }
 
         try {
             //save photo file locally
