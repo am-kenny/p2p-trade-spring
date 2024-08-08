@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Service
 @AllArgsConstructor
@@ -21,10 +20,7 @@ public class MyUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = daoUser.findByUsername(username);
 
-        MyUserDetails myUserDetails = user.map(MyUserDetails::new).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-
-        Logger.getGlobal().info("Username: " + username + " Password: " + myUserDetails.getPassword() );
-        return myUserDetails;
+        return user.map(MyUserDetails::new).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
 }
