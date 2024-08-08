@@ -1,8 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
-import com.mycompany.p2pTradeSpringProject.dto.LoginRequest;
 import com.mycompany.p2pTradeSpringProject.dto.RegistrationRequest;
-import com.mycompany.p2pTradeSpringProject.exception.BadCredentialsException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUser;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
 import com.mycompany.p2pTradeSpringProject.utils.UserMapper;
@@ -15,12 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class AuthService {
 
-    private final IDAOUser daoUser; // TODO: Ask what if there several implementations
-
-    @Transactional(readOnly = true)
-    public User login(LoginRequest loginRequest) throws BadCredentialsException {
-        return daoUser.findByUsernamePassword(loginRequest.getUsername(), loginRequest.getPassword()).orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
-    }
+    private final IDAOUser daoUser;
 
     public void register(RegistrationRequest request) {
         User user = UserMapper.toEntity(request);
