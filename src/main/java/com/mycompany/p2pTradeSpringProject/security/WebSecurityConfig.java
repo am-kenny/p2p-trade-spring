@@ -21,8 +21,13 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .addFilterBefore(
+                        new LoginPageFilter(),
+                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class
+                )
+
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(Urls.ROOT, Urls.HOME, Urls.REGISTER, Urls.LOGIN).permitAll()
+                        .requestMatchers(Urls.ROOT, Urls.HOME).permitAll()
                         .anyRequest().authenticated()
                 )
 
