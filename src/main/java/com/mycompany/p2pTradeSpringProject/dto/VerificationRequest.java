@@ -1,15 +1,14 @@
 package com.mycompany.p2pTradeSpringProject.dto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 import org.springframework.web.multipart.MultipartFile;
 
-@Data
+@Value
 @Builder
 public class VerificationRequest {
-    private String name;
-    private String surname;
-    private String passportNumber;
-    private MultipartFile passportPhoto;
-    private String passportPhotoReference;
+    String name;
+    String surname;
+    String passportNumber;
+    MultipartFile passportPhoto;
 }

@@ -11,10 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 
 @Controller
 @RequestMapping(Urls.VERIFY)
@@ -45,20 +42,8 @@ public class VerificationController {
             return "redirect:" + Urls.PROFILE; // Redirect to profile page if user is already verified
         }
 
-        try {
-            //save photo file locally
-            String filePath = "D:\\IdeaProjects\\p2pTradeSpringProject\\src\\main\\resources\\static\\passport_images\\"; //TODO: Change this to a more appropriate location
-            MultipartFile passportPhoto = verificationRequest.getPassportPhoto();
-
-            passportPhoto.transferTo(new File(filePath + passportPhoto.getOriginalFilename()));
-
-            verificationRequest.setPassportPhotoReference("passport_images/" + passportPhoto.getOriginalFilename());
-
-            User user = userDetails.getUser();
-            userVerificationService.verifyUser(user.getId(), verificationRequest);
-        } catch (IOException e) {
-            return "redirect:" + Urls.VERIFY; // Redirect back to verify page on failure
-        }
+        User user = userDetails.getUser();
+        userVerificationService.verifyUser(user.getId(), verificationRequest);
 
         return "redirect:" + Urls.PROFILE; // Redirect to profile page on success
     }
