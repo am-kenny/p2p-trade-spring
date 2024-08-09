@@ -27,7 +27,7 @@ public class WebSecurityConfig {
                 )
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(Urls.ROOT, Urls.HOME).permitAll()
+                        .requestMatchers(Urls.ROOT, Urls.HOME, Urls.REGISTER, Urls.LOGIN).permitAll()
                         .anyRequest().authenticated()
                 )
 
