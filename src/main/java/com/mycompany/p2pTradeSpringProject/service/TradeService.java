@@ -2,6 +2,7 @@ package com.mycompany.p2pTradeSpringProject.service;
 
 import com.mycompany.p2pTradeSpringProject.dto.*;
 import com.mycompany.p2pTradeSpringProject.dto.Error;
+import com.mycompany.p2pTradeSpringProject.exception.TradeNotFoundException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOTrade;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.Trade;
 import com.mycompany.p2pTradeSpringProject.utils.TradeMapper;
@@ -59,7 +60,7 @@ public class TradeService {
     public OpenTradeDto getOpenTradeById(int id) {
         return TradeMapper.mapToOpenTradeDto(
                 daoTrade.findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("Trade not found"))
+                        .orElseThrow(() -> new TradeNotFoundException("Trade not found"))
         );
     }
 
