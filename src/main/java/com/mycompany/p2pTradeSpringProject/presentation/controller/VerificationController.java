@@ -3,7 +3,7 @@ package com.mycompany.p2pTradeSpringProject.presentation.controller;
 import com.mycompany.p2pTradeSpringProject.constants.Urls;
 import com.mycompany.p2pTradeSpringProject.dto.VerificationRequest;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
-import com.mycompany.p2pTradeSpringProject.security.MyUserDetails;
+import com.mycompany.p2pTradeSpringProject.security.CustomUserDetails;
 import com.mycompany.p2pTradeSpringProject.service.UserVerificationService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +24,7 @@ public class VerificationController {
     private final UserVerificationService userVerificationService;
 
     @GetMapping
-    public String verify(@AuthenticationPrincipal MyUserDetails userDetails) {
+    public String verify(@AuthenticationPrincipal CustomUserDetails userDetails) {
 
         boolean isVerified = userVerificationService.isVerified(userDetails.getUser().getId());
 
@@ -37,7 +37,7 @@ public class VerificationController {
 
     @PostMapping
     public String verifyPost(VerificationRequest verificationRequest,
-                             @AuthenticationPrincipal MyUserDetails userDetails) {
+                             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         boolean isVerified = userVerificationService.isVerified(userDetails.getUser().getId());
 

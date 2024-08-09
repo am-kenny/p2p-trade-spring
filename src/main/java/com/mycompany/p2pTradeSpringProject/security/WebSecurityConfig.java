@@ -45,9 +45,9 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider daoAuthenticationProvider(MyUserDetailService myUserDetailService, PasswordEncoder passwordEncoder) { // This bean is made because of need to set hideUserNotFoundExceptions to false
+    public AuthenticationProvider daoAuthenticationProvider(CustomUserDetailService customUserDetailService, PasswordEncoder passwordEncoder) { // This bean is made because of need to set hideUserNotFoundExceptions to false
         DaoAuthenticationProvider impl = new DaoAuthenticationProvider();
-        impl.setUserDetailsService(myUserDetailService);
+        impl.setUserDetailsService(customUserDetailService);
         impl.setHideUserNotFoundExceptions(false);
         impl.setPasswordEncoder(passwordEncoder);
         return impl;
@@ -64,7 +64,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public MyUserDetailService myUserDetailService(IDAOUser daoUser) {
-        return new MyUserDetailService(daoUser);
+    public CustomUserDetailService myUserDetailService(IDAOUser daoUser) {
+        return new CustomUserDetailService(daoUser);
     }
 }

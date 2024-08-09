@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class MyUserDetailService implements UserDetailsService {
+public class CustomUserDetailService implements UserDetailsService {
 
     IDAOUser daoUser;
 
@@ -20,7 +20,7 @@ public class MyUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = daoUser.findByUsername(username);
 
-        return user.map(MyUserDetails::new).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        return user.map(CustomUserDetails::new).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
 }

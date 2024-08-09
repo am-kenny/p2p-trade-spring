@@ -3,7 +3,7 @@ package com.mycompany.p2pTradeSpringProject.presentation.controller;
 import com.mycompany.p2pTradeSpringProject.constants.Urls;
 import com.mycompany.p2pTradeSpringProject.dto.*;
 import com.mycompany.p2pTradeSpringProject.dto.Error;
-import com.mycompany.p2pTradeSpringProject.security.MyUserDetails;
+import com.mycompany.p2pTradeSpringProject.security.CustomUserDetails;
 import com.mycompany.p2pTradeSpringProject.service.CurrencyService;
 import com.mycompany.p2pTradeSpringProject.service.TradeService;
 import lombok.AllArgsConstructor;
@@ -25,17 +25,16 @@ public class TradesController {
     private final CurrencyService currencyService;
 
     @GetMapping("/{id}")
-    public String getOpenTrade(@PathVariable int id,
+    public String viewOpenTrade(@PathVariable int id,
                                Model model) {
 
-        tradeService.getOpenTradeById(id);
         model.addAttribute("trade", tradeService.getOpenTradeById(id));
 
         return "trade";
     }
 
     @GetMapping()
-    public String getOpenTrades(GetOpenTradesRequest tradesRequest,
+    public String viewOpenTrades(GetOpenTradesRequest tradesRequest,
                                 Model model) {
 
         GetOpenTradesResponse getOpenTradesResponse = tradeService.getOpenTrades(tradesRequest);
@@ -57,10 +56,10 @@ public class TradesController {
 
     @PostMapping()
     public String createTrade(CreateTradeRequest createTradeRequest,
-                              @AuthenticationPrincipal MyUserDetails userDetails,
+                              @AuthenticationPrincipal CustomUserDetails userDetails,
                               RedirectAttributes redirectAttributes) {
 
-        CreateTradeResponse response = tradeService.createTrade(createTradeRequest, userDetails.getUser().getId()); //TODO: add exception handling
+        CreateTradeResponse response = tradeService.createTrade(createTradeRequest, userDetails.getUser().getId());
 
         if (!response.isSuccess()) {
             redirectAttributes.addFlashAttribute("errors", response.getErrors());

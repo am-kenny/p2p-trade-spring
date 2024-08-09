@@ -9,21 +9,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-public class MyUserDetails implements UserDetails {
+public class CustomUserDetails implements UserDetails {
 
     @Getter
-    private User user;
-    private List<GrantedAuthority> authorities;
+    private final User user;
 
-    public MyUserDetails(User user) {
+    private final List<GrantedAuthority> authorities;
+
+    public CustomUserDetails(User user) {
         this.user = user;
         this.authorities = "admin".equals(user.getUserType().getName()) ?
                 List.of(new SimpleGrantedAuthority("ROLE_ADMIN")) :
                 List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
-    public MyUserDetails() {
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
