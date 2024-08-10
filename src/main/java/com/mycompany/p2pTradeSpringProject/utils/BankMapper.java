@@ -24,4 +24,10 @@ public class BankMapper {
                 .name(entity.getName())
                 .build();
     }
+
+    public static Bank toEntity(Integer bankId) {
+        return Bank.builder()
+                .id(bankId)
+                .build();
+    }
 }

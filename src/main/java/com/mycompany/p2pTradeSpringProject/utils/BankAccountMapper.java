@@ -1,6 +1,7 @@
 package com.mycompany.p2pTradeSpringProject.utils;
 
 import com.mycompany.p2pTradeSpringProject.dto.BankAccountDto;
+import com.mycompany.p2pTradeSpringProject.dto.CreateBankAccountRequest;
 import com.mycompany.p2pTradeSpringProject.persistence.entities.BankAccount;
 
 public class BankAccountMapper {
@@ -28,6 +29,18 @@ public class BankAccountMapper {
                 .bank(BankMapper.toDto(entity.getBank()))
                 .currency(CurrencyMapper.toDto(entity.getCurrency()))
                 .cardholderName(entity.getCardholderName())
+                .build();
+    }
+
+    public static BankAccount toEntity(CreateBankAccountRequest request) {
+        if (request == null) {
+            return null;
+        }
+        return BankAccount.builder()
+                .cardNumber(request.getCardNumber())
+                .bank(BankMapper.toEntity(request.getBankId()))
+                .currency(CurrencyMapper.toEntity(request.getCurrencyId()))
+                .cardholderName(request.getCardholderName())
                 .build();
     }
 
