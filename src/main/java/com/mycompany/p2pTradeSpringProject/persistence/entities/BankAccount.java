@@ -1,9 +1,7 @@
 package com.mycompany.p2pTradeSpringProject.persistence.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.proxy.HibernateProxy;
@@ -12,6 +10,9 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "bank_account", indexes = {
         @Index(name = "fk_bank_account_bank_idx", columnList = "bank_id"),

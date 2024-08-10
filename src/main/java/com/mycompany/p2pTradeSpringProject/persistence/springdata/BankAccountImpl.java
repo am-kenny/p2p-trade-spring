@@ -49,4 +49,9 @@ public class BankAccountImpl implements IDAOBankAccount {
     public Long count() {
         return bankAccountRepository.count();
     }
+
+    @Override
+    public List<BankAccount> findByUserId(Integer userId) {
+        return bankAccountRepository.findByUserId(userId);
+    }
 }
