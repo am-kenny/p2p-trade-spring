@@ -12,7 +12,7 @@ public class BankAccountMapper {
         }
         return BankAccount.builder()
                 .id(dto.getId())
-                .cardNumber(dto.getCardNumber())
+                .accountNumber(dto.getAccountNumber())
                 .bank(BankMapper.toEntity(dto.getBank()))
                 .currency(CurrencyMapper.toEntity(dto.getCurrency()))
                 .cardholderName(dto.getCardholderName())
@@ -25,7 +25,7 @@ public class BankAccountMapper {
         }
         return BankAccountDto.builder()
                 .id(entity.getId())
-                .cardNumber(entity.getCardNumber())
+                .accountNumber(entity.getAccountNumber())
                 .bank(BankMapper.toDto(entity.getBank()))
                 .currency(CurrencyMapper.toDto(entity.getCurrency()))
                 .cardholderName(entity.getCardholderName())
@@ -37,7 +37,7 @@ public class BankAccountMapper {
             return null;
         }
         return BankAccount.builder()
-                .cardNumber(request.getCardNumber())
+                .accountNumber(request.getAccountNumber())
                 .bank(BankMapper.toEntity(request.getBankId()))
                 .currency(CurrencyMapper.toEntity(request.getCurrencyId()))
                 .cardholderName(request.getCardholderName())

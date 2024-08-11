@@ -16,7 +16,7 @@
             <th>Actions</th>
         </tr>
         <tr th:each="bankAccount : ${bankAccounts}">
-            <td th:text="${bankAccount.cardNumber}"></td>
+            <td th:text="${bankAccount.accountNumber}"></td>
             <td th:text="${bankAccount.cardholderName}"></td>
             <td th:text="${bankAccount.bank.name}"></td>
             <td th:text="${bankAccount.currency.name}"></td>

@@ -10,7 +10,7 @@ import lombok.Value;
 public class CreateBankAccountRequest {
 
     @NotNull
-    Integer cardNumber;
+    String accountNumber;
 
     @NotNull
     Integer bankId;

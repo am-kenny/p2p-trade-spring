@@ -13,7 +13,7 @@ import lombok.Value;
 @Builder
 public class BankAccountDto {
     Integer id;
-    Integer cardNumber;
+    String accountNumber;
     BankDto bank;
     CurrencyDto currency;
     String cardholderName;

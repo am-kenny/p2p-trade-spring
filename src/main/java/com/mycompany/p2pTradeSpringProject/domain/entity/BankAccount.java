@@ -25,8 +25,8 @@ public class BankAccount {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "card_number", nullable = false)
-    private Integer cardNumber;
+    @Column(name = "account_number", nullable = false)
+    private String accountNumber;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "bank_id", nullable = false)
