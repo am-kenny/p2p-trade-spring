@@ -49,4 +49,9 @@ public class UserVerificationImpl implements IDAOUserVerification {
     public Long count() {
         return userVerificationRepository.count();
     }
+
+    @Override
+    public boolean existsByPassportNumber(String passportNumber) {
+        return userVerificationRepository.existsByPassportNumber(passportNumber);
+    }
 }

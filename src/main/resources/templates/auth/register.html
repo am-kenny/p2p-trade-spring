@@ -23,5 +23,10 @@
         <button type="submit">Register</button>
     </div>
 </form>
+
+<div>
+    <div th:each="error: ${errors}" th:text="${error.message}"></div>
+</div>
+
 </body>
 </html>

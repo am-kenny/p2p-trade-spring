@@ -16,5 +16,8 @@
         <button type="submit">Verify</button>
     </form>
 </div>
+<div>
+    <div th:each="error: ${errors}" th:text="${error.message}"></div>
+</div>
 </body>
 </html>
