@@ -4,12 +4,12 @@ import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
 import lombok.Builder;
 import lombok.Value;
 
-import java.util.List;
+import java.util.Set;
 
 @Value
 @Builder
 public class CreateBankResponse {
     boolean success;
     Integer bankId;
-    List<Error> errors;
+    Set<Error> errors;
 }

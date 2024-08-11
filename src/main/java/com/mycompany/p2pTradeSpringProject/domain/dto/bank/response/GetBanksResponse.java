@@ -6,10 +6,11 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.util.List;
+import java.util.Set;
 
 @Value
 @Builder
 public class GetBanksResponse {
     List<BankDto> banks;
-    List<Error> errors;
+    Set<Error> errors;
 }
