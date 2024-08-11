@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,16 +44,13 @@ public class BankAccountService {
     @Transactional
     public CreateBankAccountResponse createBankAccountForUser   (CreateBankAccountRequest request, Integer userId) {
 
-        Set<ConstraintViolation<CreateBankAccountRequest>> violations = validator.validate(request);
 
-        if (!violations.isEmpty()) {
+        Set<Error> errors = validateRegistrationRequest(request);
+
+        if (!errors.isEmpty()) {
             return CreateBankAccountResponse.builder()
                     .success(false)
-                    .errors(violations.stream()
-                            .map(violation -> Error.builder()
-                                    .message(violation.getMessage())
-                                    .build())
-                            .toList())
+                    .errors(errors)
                     .build();
         }
 
@@ -66,6 +64,19 @@ public class BankAccountService {
                 .bankAccountId(bankAccountId)
                 .build();
 
+    }
+
+    private Set<Error> validateRegistrationRequest(CreateBankAccountRequest request) {
+        Set<ConstraintViolation<CreateBankAccountRequest>> violations = validator.validate(request);
+        Set<Error> errors = new HashSet<>();
+
+        if (!violations.isEmpty()) {
+            violations.forEach(violation -> errors.add(Error.builder()
+                    .message(violation.getMessage())
+                    .build()));
+        }
+
+        return errors;
     }
 
 }
