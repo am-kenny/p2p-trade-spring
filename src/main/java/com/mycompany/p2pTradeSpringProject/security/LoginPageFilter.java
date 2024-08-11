@@ -1,6 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.security;
 
-import com.mycompany.p2pTradeSpringProject.constants.Urls;
+import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;

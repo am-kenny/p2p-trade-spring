@@ -1,7 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.presentation.controller;
 
-import com.mycompany.p2pTradeSpringProject.constants.Urls;
-import com.mycompany.p2pTradeSpringProject.service.AuthService;
+import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +10,9 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class LoginController {
 
-    private final AuthService authService;
-
     @GetMapping
     public String login() {
-        return "login";
+        return "auth/login";
     }
 
 }

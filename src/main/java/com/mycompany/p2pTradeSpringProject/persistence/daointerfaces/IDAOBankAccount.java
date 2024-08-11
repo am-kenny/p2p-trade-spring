@@ -1,6 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.persistence.daointerfaces;
 
-import com.mycompany.p2pTradeSpringProject.persistence.entities.BankAccount;
+import com.mycompany.p2pTradeSpringProject.domain.entity.BankAccount;
 
 import java.util.List;
 

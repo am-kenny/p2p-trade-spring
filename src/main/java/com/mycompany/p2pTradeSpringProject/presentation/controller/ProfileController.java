@@ -1,7 +1,7 @@
 package com.mycompany.p2pTradeSpringProject.presentation.controller;
 
-import com.mycompany.p2pTradeSpringProject.constants.Urls;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
+import com.mycompany.p2pTradeSpringProject.constant.Urls;
+import com.mycompany.p2pTradeSpringProject.domain.entity.User;
 import com.mycompany.p2pTradeSpringProject.security.CustomUserDetails;
 import com.mycompany.p2pTradeSpringProject.service.UserVerificationService;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class ProfileController {
 
         model.addAttribute("authenticatedUser", user);
         model.addAttribute("isVerified", userVerificationService.isVerified(user.getId()));
-        return "profile";
+        return "user/profile";
 
     }
 }

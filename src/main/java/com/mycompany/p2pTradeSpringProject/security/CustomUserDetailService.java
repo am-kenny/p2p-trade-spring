@@ -1,7 +1,7 @@
 package com.mycompany.p2pTradeSpringProject.security;
 
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUser;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
+import com.mycompany.p2pTradeSpringProject.domain.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

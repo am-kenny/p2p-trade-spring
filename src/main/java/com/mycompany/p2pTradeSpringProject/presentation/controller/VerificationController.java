@@ -1,8 +1,8 @@
 package com.mycompany.p2pTradeSpringProject.presentation.controller;
 
-import com.mycompany.p2pTradeSpringProject.constants.Urls;
-import com.mycompany.p2pTradeSpringProject.dto.VerificationRequest;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
+import com.mycompany.p2pTradeSpringProject.constant.Urls;
+import com.mycompany.p2pTradeSpringProject.domain.dto.userprofile.request.VerificationRequest;
+import com.mycompany.p2pTradeSpringProject.domain.entity.User;
 import com.mycompany.p2pTradeSpringProject.security.CustomUserDetails;
 import com.mycompany.p2pTradeSpringProject.service.UserVerificationService;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,7 @@ public class VerificationController {
             return "redirect:" + Urls.PROFILE; // Redirect to profile page if user is already verified
         }
 
-        return "verify";
+        return "user/verify";
     }
 
     @PostMapping

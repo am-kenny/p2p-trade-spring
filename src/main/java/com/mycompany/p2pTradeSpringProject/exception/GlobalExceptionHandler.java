@@ -1,6 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.exception;
 
-import com.mycompany.p2pTradeSpringProject.components.Debug;
+import com.mycompany.p2pTradeSpringProject.component.Debug;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +11,8 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    public static final String ERROR_TEMPLATE = "common/error";
 
     private final Debug debug;
 
@@ -30,7 +32,7 @@ public class GlobalExceptionHandler {
             model.addAttribute("stackTrace", getStackTraceAsString(e));
         }
 
-        return "error";
+        return ERROR_TEMPLATE;
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
@@ -43,7 +45,7 @@ public class GlobalExceptionHandler {
             model.addAttribute("stackTrace", getStackTraceAsString(e));
         }
 
-        return "error";
+        return ERROR_TEMPLATE;
     }
 
     @ExceptionHandler(Exception.class)
@@ -56,7 +58,7 @@ public class GlobalExceptionHandler {
             model.addAttribute("stackTrace", getStackTraceAsString(e));
         }
 
-        return "error";
+        return ERROR_TEMPLATE;
     }
 
     private String getStackTraceAsString(Exception e) {

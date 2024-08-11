@@ -1,12 +1,17 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
-import com.mycompany.p2pTradeSpringProject.dto.*;
-import com.mycompany.p2pTradeSpringProject.dto.Error;
-import com.mycompany.p2pTradeSpringProject.exception.TradeNotFoundException;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.CurrencyDto;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.trade.OpenTradeDto;
+import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.CreateTradeRequest;
+import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.GetOpenTradesRequest;
+import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.CreateTradeResponse;
+import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.GetOpenTradesResponse;
+import com.mycompany.p2pTradeSpringProject.exception.custom.TradeNotFoundException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOTrade;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.Trade;
-import com.mycompany.p2pTradeSpringProject.utils.TradeMapper;
-import com.mycompany.p2pTradeSpringProject.utils.UserMapper;
+import com.mycompany.p2pTradeSpringProject.domain.entity.Trade;
+import com.mycompany.p2pTradeSpringProject.service.mapper.TradeMapper;
+import com.mycompany.p2pTradeSpringProject.service.mapper.UserMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
@@ -31,6 +36,8 @@ public class TradeService {
 
     private final CurrencyService currencyService;
 
+
+    @Transactional
     public CreateTradeResponse createTrade(CreateTradeRequest request, Integer userId) {
 
         Set<ConstraintViolation<CreateTradeRequest>> violations = validator.validate(request);
@@ -65,7 +72,7 @@ public class TradeService {
     }
 
     @Transactional(readOnly = true)
-    public GetOpenTradesResponse getOpenTrades(GetOpenTradesRequest request) { //TODO: Filter only open trades
+    public GetOpenTradesResponse getOpenTrades(GetOpenTradesRequest request) {
 
         Logger.getGlobal().info("GetOpenTradesRequest: " + "getBuy:" + request.getBuy() + " tradeCurrencyId:" + request.getTradeCurrencyId() + " exchangeCurrencyId:" + request.getExchangeCurrencyId());
 

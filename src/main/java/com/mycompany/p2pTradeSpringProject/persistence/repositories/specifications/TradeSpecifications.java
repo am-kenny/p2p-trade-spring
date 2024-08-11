@@ -1,8 +1,8 @@
 package com.mycompany.p2pTradeSpringProject.persistence.repositories.specifications;
 
-import com.mycompany.p2pTradeSpringProject.persistence.entities.Status;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.Trade;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.Trade_;
+import com.mycompany.p2pTradeSpringProject.domain.entity.Status;
+import com.mycompany.p2pTradeSpringProject.domain.entity.Trade;
+import com.mycompany.p2pTradeSpringProject.domain.entity.Trade_;
 import org.springframework.data.jpa.domain.Specification;
 
 public class TradeSpecifications {

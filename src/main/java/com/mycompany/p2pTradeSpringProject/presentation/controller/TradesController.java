@@ -1,8 +1,12 @@
 package com.mycompany.p2pTradeSpringProject.presentation.controller;
 
-import com.mycompany.p2pTradeSpringProject.constants.Urls;
-import com.mycompany.p2pTradeSpringProject.dto.*;
-import com.mycompany.p2pTradeSpringProject.dto.Error;
+import com.mycompany.p2pTradeSpringProject.constant.Urls;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.CurrencyDto;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.CreateTradeRequest;
+import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.GetOpenTradesRequest;
+import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.CreateTradeResponse;
+import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.GetOpenTradesResponse;
 import com.mycompany.p2pTradeSpringProject.security.CustomUserDetails;
 import com.mycompany.p2pTradeSpringProject.service.CurrencyService;
 import com.mycompany.p2pTradeSpringProject.service.TradeService;
@@ -30,17 +34,17 @@ public class TradesController {
 
         model.addAttribute("trade", tradeService.getOpenTradeById(id));
 
-        return "trade";
+        return "trade/tradeDetails";
     }
 
     @GetMapping()
     public String viewOpenTrades(GetOpenTradesRequest tradesRequest,
-                                Model model) {
+                                 Model model) {
 
         GetOpenTradesResponse getOpenTradesResponse = tradeService.getOpenTrades(tradesRequest);
         model.addAttribute("trades", getOpenTradesResponse.getOpenTrades());
         model.addAttribute("currencies", getOpenTradesResponse.getCurrencies());
-        return "trades";
+        return "trade/tradeList";
     }
 
 
@@ -51,7 +55,7 @@ public class TradesController {
         List<CurrencyDto> currencies = currencyService.getAllCurrencies();
         model.addAttribute("currencies", currencies);
 
-        return "createTrade";
+        return "trade/createTrade";
     }
 
     @PostMapping()

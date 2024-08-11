@@ -1,8 +1,8 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
-import com.mycompany.p2pTradeSpringProject.dto.CurrencyDto;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.CurrencyDto;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOCurrency;
-import com.mycompany.p2pTradeSpringProject.utils.CurrencyMapper;
+import com.mycompany.p2pTradeSpringProject.service.mapper.CurrencyMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,6 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.security;
 
-import com.mycompany.p2pTradeSpringProject.constants.Urls;
+import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

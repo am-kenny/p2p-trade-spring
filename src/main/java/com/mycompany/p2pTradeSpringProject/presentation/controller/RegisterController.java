@@ -1,7 +1,7 @@
 package com.mycompany.p2pTradeSpringProject.presentation.controller;
 
-import com.mycompany.p2pTradeSpringProject.constants.Urls;
-import com.mycompany.p2pTradeSpringProject.dto.RegistrationRequest;
+import com.mycompany.p2pTradeSpringProject.constant.Urls;
+import com.mycompany.p2pTradeSpringProject.domain.dto.auth.request.RegistrationRequest;
 import com.mycompany.p2pTradeSpringProject.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -18,7 +18,7 @@ public class RegisterController {
 
     @GetMapping
     public String register() {
-        return "register";
+        return "auth/register";
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})

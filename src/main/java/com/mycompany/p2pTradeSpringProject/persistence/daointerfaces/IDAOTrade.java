@@ -1,6 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.persistence.daointerfaces;
 
-import com.mycompany.p2pTradeSpringProject.persistence.entities.Trade;
+import com.mycompany.p2pTradeSpringProject.domain.entity.Trade;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;

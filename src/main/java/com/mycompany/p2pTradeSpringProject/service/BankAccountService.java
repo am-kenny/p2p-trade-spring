@@ -1,14 +1,14 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
-import com.mycompany.p2pTradeSpringProject.dto.BankAccountDto;
-import com.mycompany.p2pTradeSpringProject.dto.CreateBankAccountRequest;
-import com.mycompany.p2pTradeSpringProject.dto.CreateBankAccountResponse;
-import com.mycompany.p2pTradeSpringProject.dto.Error;
-import com.mycompany.p2pTradeSpringProject.dto.GetBankAccountsResponse;
+import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankAccountDto;
+import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.CreateBankAccountRequest;
+import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.CreateBankAccountResponse;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.GetBankAccountsResponse;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOBankAccount;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.BankAccount;
-import com.mycompany.p2pTradeSpringProject.utils.BankAccountMapper;
-import com.mycompany.p2pTradeSpringProject.utils.UserMapper;
+import com.mycompany.p2pTradeSpringProject.domain.entity.BankAccount;
+import com.mycompany.p2pTradeSpringProject.service.mapper.BankAccountMapper;
+import com.mycompany.p2pTradeSpringProject.service.mapper.UserMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;

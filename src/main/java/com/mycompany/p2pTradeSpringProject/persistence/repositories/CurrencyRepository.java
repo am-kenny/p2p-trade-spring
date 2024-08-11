@@ -1,6 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.persistence.repositories;
 
-import com.mycompany.p2pTradeSpringProject.persistence.entities.Currency;
+import com.mycompany.p2pTradeSpringProject.domain.entity.Currency;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

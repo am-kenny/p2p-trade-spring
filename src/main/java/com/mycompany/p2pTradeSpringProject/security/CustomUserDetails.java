@@ -1,6 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.security;
 
-import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
+import com.mycompany.p2pTradeSpringProject.domain.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

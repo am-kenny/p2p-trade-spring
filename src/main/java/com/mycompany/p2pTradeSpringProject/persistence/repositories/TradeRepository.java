@@ -1,6 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.persistence.repositories;
 
-import com.mycompany.p2pTradeSpringProject.persistence.entities.Trade;
+import com.mycompany.p2pTradeSpringProject.domain.entity.Trade;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

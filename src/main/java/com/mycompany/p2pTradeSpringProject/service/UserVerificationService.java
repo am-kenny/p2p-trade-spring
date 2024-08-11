@@ -1,10 +1,10 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
-import com.mycompany.p2pTradeSpringProject.dto.VerificationRequest;
+import com.mycompany.p2pTradeSpringProject.domain.dto.userprofile.request.VerificationRequest;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUser;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUserVerification;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.User;
-import com.mycompany.p2pTradeSpringProject.persistence.entities.UserVerification;
+import com.mycompany.p2pTradeSpringProject.domain.entity.User;
+import com.mycompany.p2pTradeSpringProject.domain.entity.UserVerification;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
