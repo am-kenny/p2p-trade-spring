@@ -1,6 +1,7 @@
 package com.mycompany.p2pTradeSpringProject.service.mapper;
 
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankDto;
+import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.CreateBankRequest;
 import com.mycompany.p2pTradeSpringProject.domain.entity.Bank;
 
 public class BankMapper {
@@ -28,6 +29,12 @@ public class BankMapper {
     public static Bank toEntity(Integer bankId) {
         return Bank.builder()
                 .id(bankId)
+                .build();
+    }
+
+    public static Bank toEntity(CreateBankRequest request) {
+        return Bank.builder()
+                .name(request.getName())
                 .build();
     }
 }
