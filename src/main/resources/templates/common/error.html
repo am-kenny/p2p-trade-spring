@@ -10,6 +10,8 @@
     <div class="error-code" th:text="${errorCode}">Error Code</div>
     <div class="error-message" th:text="${errorMessage}">Error Message</div>
     <div th:if="${stackTrace}" class="stack-trace">
+        <h2>Exception:</h2>
+        <pre th:text="${exception}">Exception</pre>
         <h2>Stack Trace:</h2>
         <pre th:text="${stackTrace}">Stack Trace</pre>
     </div>
