@@ -5,6 +5,7 @@ import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.CreateBankAcc
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.CreateBankAccountResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.GetBankAccountsResponse;
+import com.mycompany.p2pTradeSpringProject.exception.custom.BankAccountNotFoundException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOBankAccount;
 import com.mycompany.p2pTradeSpringProject.domain.entity.BankAccount;
 import com.mycompany.p2pTradeSpringProject.service.mapper.BankAccountMapper;
@@ -12,6 +13,7 @@ import com.mycompany.p2pTradeSpringProject.service.mapper.UserMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,10 +43,20 @@ public class BankAccountService {
 
     }
 
+    @Transactional(readOnly = true)
+    public BankAccountDto getBankAccountById(Integer bankAccountId, Integer userId) {
+        BankAccount bankAccount = daoBankAccount.findById(bankAccountId)
+                .orElseThrow(() -> new BankAccountNotFoundException("Bank account not found"));
+
+        if (!bankAccount.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("Bank Account does not belong to the user"); //Is this the correct exception to throw?
+        }
+
+        return BankAccountMapper.toDto(bankAccount);
+    }
+
     @Transactional
     public CreateBankAccountResponse createBankAccountForUser   (CreateBankAccountRequest request, Integer userId) {
-
-
         Set<Error> errors = validateRegistrationRequest(request);
 
         if (!errors.isEmpty()) {
