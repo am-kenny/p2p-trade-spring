@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,6 +28,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({EntityNotFoundException.class, NoResourceFoundException.class})
     public ModelAndView handleTradeNotFoundException(Exception e) {
         HttpStatus status = HttpStatus.NOT_FOUND;
+        return getModelAndView(e, status);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ModelAndView handleMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
         return getModelAndView(e, status);
     }
 
@@ -58,6 +65,7 @@ public class GlobalExceptionHandler {
 
         if (debug.isDebugMode()) {
             logger.debug(e.getMessage(), e);
+            mav.addObject("exception", e);
             mav.addObject("stackTrace", getStackTraceAsString(e));
         }
 
