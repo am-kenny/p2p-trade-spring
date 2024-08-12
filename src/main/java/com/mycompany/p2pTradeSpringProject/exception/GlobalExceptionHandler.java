@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
         ModelAndView mav = getModelAndView(e, status);
 
         if (!debug.isDebugMode()) {
-            mav.addObject("stackTrace", "An unexpected error occurred");
+            mav.addObject("errorMessage", "An unexpected error occurred");
         }
         return mav;
     }
