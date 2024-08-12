@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bank account</title>
+</head>
+<body>
+    <h1>Bank account</h1>
+    <table>
+        <tr>
+            <th>Bank account number</th>
+            <td th:text="${bankAccount.accountNumber}"></td>
+        </tr>
+        <tr>
+            <th>Cardholder name</th>
+            <td th:text="${bankAccount.cardholderName}"></td>
+        </tr>
+        <tr>
+            <th>Bank</th>
+            <td th:text="${bankAccount.bank.name}"></td>
+        </tr>
+        <tr>
+            <th>Currency</th>
+            <td th:text="${bankAccount.currency.name}"></td>
+        </tr>
+    </table>
+    <a href="/profile/bank_accounts">Back to bank accounts</a>
+    <a th:href="@{'/profile/bank_accounts/' + ${bankAccount.id} + '/edit'}">Edit</a>
+    <a th:href="@{'/profile/bank_accounts/' + ${bankAccount.id} + '/delete'}">Delete</a>
+</body>
+</html>

@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Bank accounts</h1>
-    <a href="/user/bank_accounts/add">Add bank account</a>
+    <a href="/profile/bank_accounts/add">Add bank account</a>
     <table>
         <tr>
             <th>Bank account number</th>
@@ -21,9 +21,9 @@
             <td th:text="${bankAccount.bank.name}"></td>
             <td th:text="${bankAccount.currency.name}"></td>
             <td>
-                <a th:href="@{'/user/bank_accounts/' + ${bankAccount.id}}">Details</a>
-                <a th:href="@{'/user/bank_accounts/' + ${bankAccount.id} + '/edit'}">Edit</a>
-                <a th:href="@{'/user/bank_accounts/' + ${bankAccount.id} + '/delete'}">Delete</a>
+                <a th:href="@{'/profile/bank_accounts/' + ${bankAccount.id}}">Details</a>
+                <a th:href="@{'/profile/bank_accounts/' + ${bankAccount.id} + '/edit'}">Edit</a>
+                <a th:href="@{'/profile/bank_accounts/' + ${bankAccount.id} + '/delete'}">Delete</a>
             </td>
         </tr>
     </table>
