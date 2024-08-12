@@ -4,9 +4,11 @@ import com.mycompany.p2pTradeSpringProject.component.Debug;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @ControllerAdvice
@@ -22,43 +24,44 @@ public class GlobalExceptionHandler {
         this.debug = debug;
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public String handleTradeNotFoundException(EntityNotFoundException e, Model model) {
-        model.addAttribute("errorMessage", e.getMessage());
-        model.addAttribute("errorCode", "404");
-
-        if (debug.isDebugMode()) {
-            logger.debug(e.getMessage(), e);
-            model.addAttribute("stackTrace", getStackTraceAsString(e));
-        }
-
-        return ERROR_TEMPLATE;
+    @ExceptionHandler({EntityNotFoundException.class, NoResourceFoundException.class})
+    public ModelAndView handleTradeNotFoundException(Exception e) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        return getModelAndView(e, status);
     }
 
-    @ExceptionHandler(NoResourceFoundException.class)
-    public String handleNoResourceFoundException(NoResourceFoundException e, Model model) {
-        model.addAttribute("errorMessage", e.getMessage());
-        model.addAttribute("errorCode", "404");
 
-        if (debug.isDebugMode()) {
-            logger.debug(e.getMessage(), e);
-            model.addAttribute("stackTrace", getStackTraceAsString(e));
-        }
-
-        return ERROR_TEMPLATE;
+    @ExceptionHandler(AccessDeniedException.class)
+    public ModelAndView handleAccessDeniedException(AccessDeniedException e) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        return getModelAndView(e, status);
     }
 
     @ExceptionHandler(Exception.class)
-    public String handleGlobalException(Exception e, Model model) {
-        model.addAttribute("errorMessage", "An unexpected error occurred.");
-        model.addAttribute("errorCode", "500");
+    public ModelAndView handleGlobalException(Exception e) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ModelAndView mav = getModelAndView(e, status);
+
+        if (!debug.isDebugMode()) {
+            mav.addObject("stackTrace", "An unexpected error occurred");
+        }
+        return mav;
+    }
+
+    private ModelAndView getModelAndView(Exception e, HttpStatus status) {
+        ModelAndView mav = new ModelAndView();
+
+        mav.setStatus(status);
+        mav.setViewName(ERROR_TEMPLATE);
+        mav.addObject("errorMessage", e.getMessage());
+        mav.addObject("errorCode", status.toString());
 
         if (debug.isDebugMode()) {
-            logger.error(e.getMessage(), e);
-            model.addAttribute("stackTrace", getStackTraceAsString(e));
+            logger.debug(e.getMessage(), e);
+            mav.addObject("stackTrace", getStackTraceAsString(e));
         }
 
-        return ERROR_TEMPLATE;
+        return mav;
     }
 
     private String getStackTraceAsString(Exception e) {
