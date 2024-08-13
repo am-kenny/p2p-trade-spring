@@ -2,30 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bank account</title>
+    <title>Bank Account</title>
+    <style>
+        /* Hide the edit-mode elements initially */
+        .edit-mode {
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleEditMode() {
+            const viewModeElements = document.querySelectorAll('.view-mode');
+            const editModeElements = document.querySelectorAll('.edit-mode');
+
+            viewModeElements.forEach(el => {
+                el.classList.remove("view-mode");
+                el.classList.add("edit-mode");
+            });
+
+            editModeElements.forEach(el => {
+                el.classList.remove("edit-mode");
+                el.classList.add("view-mode");
+            });
+        }
+    </script>
 </head>
 <body>
-    <h1>Bank account</h1>
-    <table>
-        <tr>
-            <th>Bank account number</th>
-            <td th:text="${bankAccount.accountNumber}"></td>
-        </tr>
-        <tr>
-            <th>Cardholder name</th>
-            <td th:text="${bankAccount.cardholderName}"></td>
-        </tr>
-        <tr>
-            <th>Bank</th>
-            <td th:text="${bankAccount.bank.name}"></td>
-        </tr>
-        <tr>
-            <th>Currency</th>
-            <td th:text="${bankAccount.currency.name}"></td>
-        </tr>
-    </table>
-    <a href="/profile/bank_accounts">Back to bank accounts</a>
-    <a th:href="@{'/profile/bank_accounts/' + ${bankAccount.id} + '/edit'}">Edit</a>
-    <a th:href="@{'/profile/bank_accounts/' + ${bankAccount.id} + '/delete'}">Delete</a>
+<h1>Bank Account</h1>
+<table>
+    <tr>
+        <th>Bank account number</th>
+        <td>
+            <span class="view-mode" th:text="${bankAccount.accountNumber}"></span>
+            <input class="edit-mode" type="text" name="accountNumber" th:value="${bankAccount.accountNumber}" />
+        </td>
+    </tr>
+    <tr>
+        <th>Cardholder name</th>
+        <td>
+            <span class="view-mode" th:text="${bankAccount.cardholderName}"></span>
+            <input class="edit-mode" type="text" name="cardholderName" th:value="${bankAccount.cardholderName}" />
+        </td>
+    </tr>
+    <tr>
+        <th>Bank</th>
+        <td>
+            <span class="view-mode" th:text="${bankAccount.bank.name}"></span>
+            <select class="edit-mode" name="bankId">
+                <option th:each="bank : ${banks}"
+                        th:value="${bank.id}"
+                        th:text="${bank.name}"
+                        th:selected="${bank.id == bankAccount.bank.id}">Bank</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>Currency</th>
+        <td>
+            <span class="view-mode" th:text="${bankAccount.currency.name}"></span>
+            <select class="edit-mode" name="currencyId">
+                <option th:each="currency : ${currencies}"
+                        th:value="${currency.id}"
+                        th:text="${currency.name}"
+                        th:selected="${currency.id == bankAccount.currency.id}">Currency</option>
+            </select>
+        </td>
+    </tr>
+</table>
+<!-- Edit button in view mode -->
+<button type="button" class="view-mode" onclick="toggleEditMode()">Edit</button>
+
+<!-- Save and Cancel buttons in edit mode -->
+<form class="edit-mode" th:action="@{'/profile/bank_accounts/' + ${bankAccount.id} + '/update'}" th:method="post">
+    <button type="submit">Save</button>
+    <button type="button" onclick="toggleEditMode()">Cancel</button>
+</form>
+
+<a href="/profile/bank_accounts">Back to bank accounts</a>
 </body>
 </html>
