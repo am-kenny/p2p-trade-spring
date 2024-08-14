@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Value
 @Builder
-public class CreateBankAccountResponse {
+public class BankAccountResponse {
     boolean success;
     Integer bankAccountId;
     Set<Error> errors;

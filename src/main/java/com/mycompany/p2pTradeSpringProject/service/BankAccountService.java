@@ -1,14 +1,16 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankAccountDto;
-import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.CreateBankAccountRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.CreateBankAccountResponse;
+import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.BankAccountRequest;
+import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.BankAccountResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.GetBankAccountsResponse;
 import com.mycompany.p2pTradeSpringProject.exception.custom.BankAccountNotFoundException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOBankAccount;
 import com.mycompany.p2pTradeSpringProject.domain.entity.BankAccount;
 import com.mycompany.p2pTradeSpringProject.service.mapper.BankAccountMapper;
+import com.mycompany.p2pTradeSpringProject.service.mapper.BankMapper;
+import com.mycompany.p2pTradeSpringProject.service.mapper.CurrencyMapper;
 import com.mycompany.p2pTradeSpringProject.service.mapper.UserMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -56,11 +58,11 @@ public class BankAccountService {
     }
 
     @Transactional
-    public CreateBankAccountResponse createBankAccountForUser   (CreateBankAccountRequest request, Integer userId) {
-        Set<Error> errors = validateRegistrationRequest(request);
+    public BankAccountResponse createBankAccountForUser   (BankAccountRequest request, Integer userId) {
+        Set<Error> errors = validateBankAccountRequest(request);
 
         if (!errors.isEmpty()) {
-            return CreateBankAccountResponse.builder()
+            return BankAccountResponse.builder()
                     .success(false)
                     .errors(errors)
                     .build();
@@ -71,15 +73,45 @@ public class BankAccountService {
 
         Integer bankAccountId = daoBankAccount.create(bankAccount);
 
-        return CreateBankAccountResponse.builder()
+        return BankAccountResponse.builder()
                 .success(true)
                 .bankAccountId(bankAccountId)
                 .build();
 
     }
 
-    private Set<Error> validateRegistrationRequest(CreateBankAccountRequest request) {
-        Set<ConstraintViolation<CreateBankAccountRequest>> violations = validator.validate(request);
+    @Transactional
+    public BankAccountResponse editBankAccountForUser(BankAccountRequest request, Integer userId, Integer bankAccountId) {
+        Set<Error> errors = validateBankAccountRequest(request);
+
+        if (!errors.isEmpty()) {
+            return BankAccountResponse.builder()
+                    .success(false)
+                    .errors(errors)
+                    .build();
+        }
+
+        BankAccount bankAccount = daoBankAccount.findById(bankAccountId)
+                .orElseThrow(() -> new BankAccountNotFoundException("Bank account not found"));
+
+        if (!bankAccount.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("Bank Account does not belong to the user"); //Is this the correct exception to throw?
+        }
+
+        bankAccount.setBank(BankMapper.toEntity(request.getBankId()));
+        bankAccount.setAccountNumber(request.getAccountNumber());
+        bankAccount.setCurrency(CurrencyMapper.toEntity(request.getCurrencyId()));
+        bankAccount.setCardholderName(request.getCardholderName());
+
+        daoBankAccount.update(bankAccount);
+
+        return BankAccountResponse.builder()
+                .success(true)
+                .build();
+    }
+
+    private Set<Error> validateBankAccountRequest(BankAccountRequest request) {
+        Set<ConstraintViolation<BankAccountRequest>> violations = validator.validate(request);
         Set<Error> errors = new HashSet<>();
 
         if (!violations.isEmpty()) {
@@ -90,5 +122,4 @@ public class BankAccountService {
 
         return errors;
     }
-
 }

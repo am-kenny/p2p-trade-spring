@@ -1,7 +1,7 @@
 package com.mycompany.p2pTradeSpringProject.service.mapper;
 
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankAccountDto;
-import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.CreateBankAccountRequest;
+import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.BankAccountRequest;
 import com.mycompany.p2pTradeSpringProject.domain.entity.BankAccount;
 
 public class BankAccountMapper {
@@ -32,7 +32,7 @@ public class BankAccountMapper {
                 .build();
     }
 
-    public static BankAccount toEntity(CreateBankAccountRequest request) {
+    public static BankAccount toEntity(BankAccountRequest request) {
         if (request == null) {
             return null;
         }

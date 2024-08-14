@@ -2,8 +2,8 @@ package com.mycompany.p2pTradeSpringProject.presentation.controller;
 
 import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankAccountDto;
-import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.CreateBankAccountRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.CreateBankAccountResponse;
+import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.BankAccountRequest;
+import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.BankAccountResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.GetBankAccountsResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
 import com.mycompany.p2pTradeSpringProject.domain.entity.User;
@@ -65,11 +65,11 @@ public class ProfileController {
     }
 
     @PostMapping("/bank_accounts")
-    public String addBankAccount(CreateBankAccountRequest request,
+    public String addBankAccount(BankAccountRequest request,
                                  @AuthenticationPrincipal CustomUserDetails userDetails,
                                  RedirectAttributes redirectAttributes) {
 
-        CreateBankAccountResponse response = bankAccountService.createBankAccountForUser(request, userDetails.getUser().getId());
+        BankAccountResponse response = bankAccountService.createBankAccountForUser(request, userDetails.getUser().getId());
 
         if (!response.isSuccess()) {
             redirectAttributes.addFlashAttribute("errors", response.getErrors());
@@ -82,23 +82,30 @@ public class ProfileController {
     @GetMapping("/bank_accounts/{id}")
     public String viewBankAccount(@PathVariable int id,
                                   @AuthenticationPrincipal CustomUserDetails userDetails,
-                                  Model model) {
+                                  Model model,
+                                  @ModelAttribute("errors") ArrayList<Error> errors) {
 
         BankAccountDto bankAccountDto = bankAccountService.getBankAccountById(id, userDetails.getUser().getId());
         model.addAttribute("bankAccount", bankAccountDto);
+        model.addAttribute("banks", bankService.getAllBanks().getBanks());
+        model.addAttribute("currencies", currencyService.getAllCurrencies());
 
         return "user/bankAccountDetails";
     }
 
-    @GetMapping("/bank_accounts/{id}/edit") //TODO: Implement
+    @PostMapping("/bank_accounts/{id}/edit")
     public String editBankAccount(@PathVariable int id,
                                   @AuthenticationPrincipal CustomUserDetails userDetails,
-                                  Model model) {
+                                  BankAccountRequest request,
+                                  RedirectAttributes redirectAttributes) {
 
-        User user = userDetails.getUser();
+        BankAccountResponse response = bankAccountService.editBankAccountForUser(request, userDetails.getUser().getId(), id);
 
+        if (!response.isSuccess()) {
+            redirectAttributes.addFlashAttribute("errors", response.getErrors());
+        }
 
-        return "user/editBankAccount";
+        return "redirect:/profile/bank_accounts/" + id;
     }
 
     @GetMapping("/bank_accounts/{id}/delete") //TODO: Implement

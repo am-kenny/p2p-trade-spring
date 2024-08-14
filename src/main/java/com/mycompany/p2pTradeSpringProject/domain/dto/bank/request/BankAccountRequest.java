@@ -7,18 +7,18 @@ import lombok.Value;
 
 @Value
 @Builder
-public class CreateBankAccountRequest {
+public class BankAccountRequest {
 
-    @NotNull
+    @NotBlank(message = "Account number is required")
     String accountNumber;
 
-    @NotNull
+    @NotNull(message = "Bank id is required")
     Integer bankId;
 
-    @NotNull
+    @NotNull(message = "Currency id is required")
     Integer currencyId;
 
-    @NotBlank
+    @NotBlank(message = "Cardholder name is required")
     String cardholderName;
 
 }

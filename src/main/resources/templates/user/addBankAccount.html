@@ -22,6 +22,11 @@
         <input type="text" name="cardholderName" id="cardholderName">
         <input type="submit" value="Add">
     </form>
+
+    <div>
+        <div th:each="error: ${errors}" th:text="${error.message}"></div>
+    </div>
+
     <a href="/profile/bank_accounts">Back</a>
 </body>
 </html>
