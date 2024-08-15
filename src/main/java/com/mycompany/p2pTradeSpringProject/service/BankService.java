@@ -1,9 +1,11 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
+import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.CreateBankRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.CreateBankResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.GetBanksResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.exception.custom.BankNotFoundException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOBank;
 import com.mycompany.p2pTradeSpringProject.service.mapper.BankMapper;
 import jakarta.validation.ConstraintViolation;
@@ -33,6 +35,11 @@ public class BankService {
                         .map(BankMapper::toDto)
                         .toList())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public BankDto getBankById(Integer id) {
+        return BankMapper.toDto(daoBank.findById(id).orElseThrow(() -> new BankNotFoundException("Bank not found")));
     }
 
     @Transactional

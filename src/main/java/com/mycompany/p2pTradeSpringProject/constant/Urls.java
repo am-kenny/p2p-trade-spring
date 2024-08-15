@@ -9,5 +9,6 @@ public class Urls {
     public static final String VERIFY = "/verify";
     public static final String PROFILE = "/profile";
     public static final String TRADES = "/trades";
+    public static final String BANKS = "/banks";
 
 }
