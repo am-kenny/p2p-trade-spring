@@ -109,15 +109,12 @@ public class ProfileController {
         return "redirect:/profile/bank_accounts/" + id;
     }
 
-    @GetMapping("/bank_accounts/{id}/delete") //TODO: Implement
+    @PostMapping("/bank_accounts/{id}/delete")
     public String deleteBankAccount(@PathVariable int id,
-                                    @AuthenticationPrincipal CustomUserDetails userDetails,
-                                    Model model) {
+                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        User user = userDetails.getUser();
-
-
-        return "user/deleteBankAccount";
+        bankAccountService.deleteBankAccountForUser(userDetails.getUser().getId(), id);
+        return "redirect:/profile/bank_accounts";
     }
 
 }

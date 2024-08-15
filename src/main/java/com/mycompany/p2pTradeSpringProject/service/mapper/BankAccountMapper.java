@@ -44,4 +44,13 @@ public class BankAccountMapper {
                 .build();
     }
 
+    public static BankAccount toEntity(Integer id) {
+        if (id == null) {
+            return null;
+        }
+        return BankAccount.builder()
+                .id(id)
+                .build();
+    }
+
 }

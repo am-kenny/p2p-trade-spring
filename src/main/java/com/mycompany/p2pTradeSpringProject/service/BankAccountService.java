@@ -77,7 +77,6 @@ public class BankAccountService {
                 .success(true)
                 .bankAccountId(bankAccountId)
                 .build();
-
     }
 
     @Transactional
@@ -107,6 +106,23 @@ public class BankAccountService {
 
         return BankAccountResponse.builder()
                 .success(true)
+                .build();
+    }
+
+    @Transactional
+    public BankAccountResponse deleteBankAccountForUser(Integer userId, Integer bankAccountId) {
+        BankAccount bankAccount = daoBankAccount.findById(bankAccountId)
+                .orElseThrow(() -> new BankAccountNotFoundException("Bank account not found"));
+
+        if (!bankAccount.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("Bank Account does not belong to the user"); //Is this the correct exception to throw?
+        }
+
+        daoBankAccount.delete(BankAccountMapper.toEntity(bankAccountId));
+
+        return BankAccountResponse.builder()
+                .success(true)
+                .bankAccountId(bankAccountId)
                 .build();
     }
 
