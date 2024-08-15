@@ -1,4 +1,4 @@
-package com.mycompany.p2pTradeSpringProject.presentation.controller;
+package com.mycompany.p2pTradeSpringProject.presentation.controller.mvc;
 
 import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.CurrencyDto;
