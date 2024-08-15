@@ -22,10 +22,11 @@
             <td th:text="${bankAccount.currency.name}"></td>
             <td>
                 <a th:href="@{'/profile/bank_accounts/' + ${bankAccount.id}}">Details</a>
-                <a th:href="@{'/profile/bank_accounts/' + ${bankAccount.id} + '/edit'}">Edit</a>
+                <a th:href="@{'/profile/bank_accounts/' + ${bankAccount.id} + '?edit'}">Edit</a>
                 <a th:href="@{'/profile/bank_accounts/' + ${bankAccount.id} + '/delete'}">Delete</a>
             </td>
         </tr>
     </table>
+    <a href="/profile">Back to profile</a>
 </body>
 </html>

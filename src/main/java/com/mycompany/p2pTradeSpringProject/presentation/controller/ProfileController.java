@@ -103,6 +103,7 @@ public class ProfileController {
 
         if (!response.isSuccess()) {
             redirectAttributes.addFlashAttribute("errors", response.getErrors());
+            return "redirect:/profile/bank_accounts/" + id + "?edit";
         }
 
         return "redirect:/profile/bank_accounts/" + id;
