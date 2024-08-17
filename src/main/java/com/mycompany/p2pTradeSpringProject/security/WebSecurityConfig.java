@@ -4,11 +4,11 @@ import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -16,6 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@Order(2)
 public class WebSecurityConfig {
 
     @Bean
@@ -27,7 +28,7 @@ public class WebSecurityConfig {
                 )
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(Urls.ROOT, Urls.HOME, Urls.REGISTER, Urls.LOGIN).permitAll()
+                        .requestMatchers(Urls.ROOT, Urls.HOME, Urls.REGISTER, Urls.LOGIN, "/error").permitAll()
                         .anyRequest().authenticated()
                 )
 
@@ -35,11 +36,12 @@ public class WebSecurityConfig {
                         .loginPage(Urls.LOGIN)
                         .failureHandler(customAuthenticationFailureHandler())
                         .permitAll()
-                ).logout((logout) -> logout
+                )
+
+                .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher(Urls.LOGOUT, "GET"))
                         .logoutSuccessUrl(Urls.LOGIN + "?logout")
                 );
-
 
         return http.build();
     }
@@ -51,11 +53,6 @@ public class WebSecurityConfig {
         impl.setHideUserNotFoundExceptions(false);
         impl.setPasswordEncoder(passwordEncoder);
         return impl;
-    }
-
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
     }
 
     @Bean
