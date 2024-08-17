@@ -1,6 +1,5 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.CurrencyDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.OpenTradeDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.CreateTradeRequest;
@@ -33,8 +32,6 @@ public class TradeService {
     private final Validator validator;
 
     private final IDAOTrade daoTrade;
-
-    private final CurrencyService currencyService;
 
 
     @Transactional
@@ -94,11 +91,9 @@ public class TradeService {
                 .map(TradeMapper::mapToOpenTradeDto)
                 .toList();
 
-        List<CurrencyDto> currencies = currencyService.getAllCurrencies();
 
         return GetOpenTradesResponse.builder()
                 .openTrades(openTradeList)
-                .currencies(currencies)
                 .build();
     }
 

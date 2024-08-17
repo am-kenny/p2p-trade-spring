@@ -42,8 +42,9 @@ public class TradesController {
                                  Model model) {
 
         GetOpenTradesResponse getOpenTradesResponse = tradeService.getOpenTrades(tradesRequest);
+        List<CurrencyDto> currencies = currencyService.getAllCurrencies();
         model.addAttribute("trades", getOpenTradesResponse.getOpenTrades());
-        model.addAttribute("currencies", getOpenTradesResponse.getCurrencies());
+        model.addAttribute("currencies", currencies);
         return "trade/tradeList";
     }
 
