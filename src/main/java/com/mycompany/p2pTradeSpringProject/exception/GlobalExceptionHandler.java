@@ -4,6 +4,7 @@ import com.mycompany.p2pTradeSpringProject.component.Debug;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-@ControllerAdvice
+@ControllerAdvice()
+@Order(2)
 public class GlobalExceptionHandler {
 
     public static final String ERROR_TEMPLATE = "common/error";
@@ -26,7 +28,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({EntityNotFoundException.class, NoResourceFoundException.class})
-    public ModelAndView handleTradeNotFoundException(Exception e) {
+    public ModelAndView handleNotFoundException(Exception e) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         return getModelAndView(e, status);
     }
