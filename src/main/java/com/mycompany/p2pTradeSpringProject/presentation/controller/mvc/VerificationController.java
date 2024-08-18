@@ -3,8 +3,8 @@ package com.mycompany.p2pTradeSpringProject.presentation.controller.mvc;
 import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.domain.dto.userprofile.request.VerificationRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.userprofile.response.VerificationResponse;
 import com.mycompany.p2pTradeSpringProject.domain.entity.User;
+import com.mycompany.p2pTradeSpringProject.exception.custom.ValidationException;
 import com.mycompany.p2pTradeSpringProject.security.CustomUserDetails;
 import com.mycompany.p2pTradeSpringProject.service.UserVerificationService;
 import lombok.AllArgsConstructor;
@@ -51,11 +51,11 @@ public class VerificationController {
         }
 
         User user = userDetails.getUser();
-        VerificationResponse response = userVerificationService.verifyUser(user.getId(), verificationRequest);
-
-        if (!response.isSuccess()) {
-            redirectAttributes.addFlashAttribute("errors", response.getErrors());
-            return "redirect:" + Urls.VERIFY; // Redirect back to verification page on failure
+        try {
+            Integer verificationId = userVerificationService.verifyUser(user.getId(), verificationRequest);
+        } catch (ValidationException e) {
+            redirectAttributes.addFlashAttribute("errors", e.getValidationErrors());
+            return "redirect:" + Urls.VERIFY; // Redirect back to verification page on validation error
         }
 
         return "redirect:" + Urls.PROFILE; // Redirect to profile page on success

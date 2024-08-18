@@ -2,7 +2,7 @@ package com.mycompany.p2pTradeSpringProject.service;
 
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.domain.dto.userprofile.request.VerificationRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.userprofile.response.VerificationResponse;
+import com.mycompany.p2pTradeSpringProject.exception.custom.ValidationException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUser;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUserVerification;
 import com.mycompany.p2pTradeSpringProject.domain.entity.User;
@@ -40,22 +40,15 @@ public class UserVerificationService {
     }
 
     @Transactional
-    public VerificationResponse verifyUser(Integer userId, VerificationRequest verificationRequest) {
-
-        Optional<User> userOptional = daoUser.findById(userId);
-
-        User user = userOptional.orElseThrow(() ->
+    public Integer verifyUser(Integer userId, VerificationRequest verificationRequest) {
+        User user = daoUser.findById(userId).orElseThrow(() ->
                 new IllegalArgumentException("User with this id not found"));
 
         Set<ValidationError> errors = validateVerificationRequest(user, verificationRequest);
 
         if (!errors.isEmpty()) {
-            return VerificationResponse.builder()
-                    .success(false)
-                    .errors(errors)
-                    .build();
+            throw new ValidationException(errors);
         }
-
 
         String passportPhotoReference = savePassportPhoto(verificationRequest.getPassportPhoto());
 
@@ -70,10 +63,7 @@ public class UserVerificationService {
         user.setUserVerification(userVerification);
         daoUser.update(user);
 
-        return VerificationResponse.builder()
-                .success(true)
-                .verificationId(verificationId)
-                .build();
+        return verificationId;
     }
 
     private Set<ValidationError> validateVerificationRequest(User user, VerificationRequest request) {
