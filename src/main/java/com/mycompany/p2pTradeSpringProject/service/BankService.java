@@ -2,10 +2,10 @@ package com.mycompany.p2pTradeSpringProject.service;
 
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.CreateBankRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.CreateBankResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.GetBanksResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.exception.custom.BankNotFoundException;
+import com.mycompany.p2pTradeSpringProject.exception.custom.ValidationException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOBank;
 import com.mycompany.p2pTradeSpringProject.service.mapper.BankMapper;
 import com.mycompany.p2pTradeSpringProject.component.ValidationWrapper;
@@ -41,22 +41,13 @@ public class BankService {
     }
 
     @Transactional
-    public CreateBankResponse createBank(CreateBankRequest request) {
+    public Integer createBank(CreateBankRequest request) {
         Set<ValidationError> errors = validationWrapper.validateObject(request);
 
         if (!errors.isEmpty()) {
-            return CreateBankResponse.builder()
-                    .success(false)
-                    .errors(errors)
-                    .build();
+            throw new ValidationException(errors);
         }
-
-        Integer bankId = daoBank.create(BankMapper.toEntity(request));
-
-        return CreateBankResponse.builder()
-                .success(true)
-                .bankId(bankId)
-                .build();
+        return daoBank.create(BankMapper.toEntity(request));
     }
 
 }

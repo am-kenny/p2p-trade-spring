@@ -3,10 +3,9 @@ package com.mycompany.p2pTradeSpringProject.presentation.controller.mvc;
 import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankAccountDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.BankAccountRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.BankAccountResponse;
-import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.GetBankAccountsResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.domain.entity.User;
+import com.mycompany.p2pTradeSpringProject.exception.custom.ValidationException;
 import com.mycompany.p2pTradeSpringProject.security.CustomUserDetails;
 import com.mycompany.p2pTradeSpringProject.service.BankAccountService;
 import com.mycompany.p2pTradeSpringProject.service.BankService;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -46,12 +46,12 @@ public class ProfileController {
 
     @GetMapping("/bank_accounts")
     public String viewUsersBankAccounts(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                    Model model) {
+                                        Model model) {
 
         User user = userDetails.getUser();
-        GetBankAccountsResponse response = bankAccountService.getUsersBankAccounts(user.getId());
+        List<BankAccountDto> bankAccounts = bankAccountService.getUsersBankAccounts(user.getId());
 
-        model.addAttribute("bankAccounts", response.getBankAccounts());
+        model.addAttribute("bankAccounts", bankAccounts);
         return "user/bankAccounts";
     }
 
@@ -68,15 +68,14 @@ public class ProfileController {
     public String addBankAccount(BankAccountRequest request,
                                  @AuthenticationPrincipal CustomUserDetails userDetails,
                                  RedirectAttributes redirectAttributes) {
-
-        BankAccountResponse response = bankAccountService.createBankAccountForUser(request, userDetails.getUser().getId());
-
-        if (!response.isSuccess()) {
-            redirectAttributes.addFlashAttribute("errors", response.getErrors());
+        try {
+            Integer bankId = bankAccountService.createBankAccountForUser(request, userDetails.getUser().getId());
+            return "redirect:/profile/bank_accounts/" + bankId;
+        } catch (ValidationException e) {
+            redirectAttributes.addFlashAttribute("errors", e.getValidationErrors());
             return "redirect:/profile/bank_accounts/add";
         }
 
-        return "redirect:/profile/bank_accounts";
     }
 
     @GetMapping("/bank_accounts/{id}")
@@ -98,15 +97,13 @@ public class ProfileController {
                                   @AuthenticationPrincipal CustomUserDetails userDetails,
                                   BankAccountRequest request,
                                   RedirectAttributes redirectAttributes) {
-
-        BankAccountResponse response = bankAccountService.editBankAccountForUser(request, userDetails.getUser().getId(), id);
-
-        if (!response.isSuccess()) {
-            redirectAttributes.addFlashAttribute("errors", response.getErrors());
+        try {
+            Integer bankAccountId = bankAccountService.editBankAccountForUser(request, userDetails.getUser().getId(), id);
+            return "redirect:/profile/bank_accounts/" + bankAccountId;
+        } catch (ValidationException e) {
+            redirectAttributes.addFlashAttribute("errors", e.getValidationErrors());
             return "redirect:/profile/bank_accounts/" + id + "?edit";
         }
-
-        return "redirect:/profile/bank_accounts/" + id;
     }
 
     @PostMapping("/bank_accounts/{id}/delete")

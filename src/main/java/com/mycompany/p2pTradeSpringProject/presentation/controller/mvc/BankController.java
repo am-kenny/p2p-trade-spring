@@ -3,8 +3,8 @@ package com.mycompany.p2pTradeSpringProject.presentation.controller.mvc;
 import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.CreateBankRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.CreateBankResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
+import com.mycompany.p2pTradeSpringProject.exception.custom.ValidationException;
 import com.mycompany.p2pTradeSpringProject.service.BankService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,15 +29,14 @@ public class BankController {
     @PostMapping
     public String createBank(CreateBankRequest request,
                              RedirectAttributes redirectAttributes) {
-
-        CreateBankResponse response = bankService.createBank(request);
-
-        if (!response.isSuccess()) {
-            redirectAttributes.addFlashAttribute("errors", response.getErrors());
+        try {
+            Integer bankId = bankService.createBank(request);
+            return "redirect:" + Urls.BANKS + "/" + bankId;
+        } catch (ValidationException e) {
+            redirectAttributes.addFlashAttribute("errors", e.getValidationErrors());
             return "redirect:" + Urls.BANKS + "/create";
         }
 
-        return "redirect:" + Urls.BANKS + "/" + response.getBankId();
     }
 
     @GetMapping("/{id}")

@@ -3,10 +3,9 @@ package com.mycompany.p2pTradeSpringProject.service;
 import com.mycompany.p2pTradeSpringProject.component.ValidationWrapper;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankAccountDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.BankAccountRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.BankAccountResponse;
-import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.GetBankAccountsResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.exception.custom.BankAccountNotFoundException;
+import com.mycompany.p2pTradeSpringProject.exception.custom.ValidationException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOBankAccount;
 import com.mycompany.p2pTradeSpringProject.domain.entity.BankAccount;
 import com.mycompany.p2pTradeSpringProject.service.mapper.*;
@@ -29,16 +28,12 @@ public class BankAccountService {
 
 
     @Transactional(readOnly = true)
-    public GetBankAccountsResponse getUsersBankAccounts(Integer userId) {
-        List<BankAccountDto> bankAccounts = daoBankAccount.findByUserId(userId)
+    public List<BankAccountDto> getUsersBankAccounts(Integer userId) {
+
+        return daoBankAccount.findByUserId(userId)
                 .stream()
                 .map(BankAccountMapper::toDto)
                 .toList();
-
-        return GetBankAccountsResponse.builder()
-                .bankAccounts(bankAccounts)
-                .build();
-
     }
 
     @Transactional(readOnly = true)
@@ -54,37 +49,25 @@ public class BankAccountService {
     }
 
     @Transactional
-    public BankAccountResponse createBankAccountForUser   (BankAccountRequest request, Integer userId) {
+    public Integer createBankAccountForUser(BankAccountRequest request, Integer userId) {
         Set<ValidationError> errors = validationWrapper.validateObject(request);
 
         if (!errors.isEmpty()) {
-            return BankAccountResponse.builder()
-                    .success(false)
-                    .errors(errors)
-                    .build();
+            throw new ValidationException(errors);
         }
 
         BankAccount bankAccount = BankAccountMapper.toEntity(request);
         bankAccount.setUser(UserMapper.toEntity(userId));
 
-        Integer bankAccountId = daoBankAccount.create(bankAccount);
-
-        return BankAccountResponse.builder()
-                .success(true)
-                .bankAccountId(bankAccountId)
-                .build();
+        return daoBankAccount.create(bankAccount);
     }
 
     @Transactional
-    public BankAccountResponse editBankAccountForUser(BankAccountRequest request, Integer userId, Integer bankAccountId) {
+    public Integer editBankAccountForUser(BankAccountRequest request, Integer userId, Integer bankAccountId) {
         Set<ValidationError> errors = validationWrapper.validateObject(request);
 
-
         if (!errors.isEmpty()) {
-            return BankAccountResponse.builder()
-                    .success(false)
-                    .errors(errors)
-                    .build();
+            throw new ValidationException(errors);
         }
 
         BankAccount bankAccount = daoBankAccount.findById(bankAccountId)
@@ -101,13 +84,11 @@ public class BankAccountService {
 
         daoBankAccount.update(bankAccount);
 
-        return BankAccountResponse.builder()
-                .success(true)
-                .build();
+        return bankAccountId;
     }
 
     @Transactional
-    public BankAccountResponse deleteBankAccountForUser(Integer userId, Integer bankAccountId) {
+    public Integer deleteBankAccountForUser(Integer userId, Integer bankAccountId) {
         BankAccount bankAccount = daoBankAccount.findById(bankAccountId)
                 .orElseThrow(() -> new BankAccountNotFoundException("Bank account not found"));
 
@@ -117,10 +98,7 @@ public class BankAccountService {
 
         daoBankAccount.delete(BankAccountMapper.toEntity(bankAccountId));
 
-        return BankAccountResponse.builder()
-                .success(true)
-                .bankAccountId(bankAccountId)
-                .build();
+        return bankAccountId;
     }
 
 }
