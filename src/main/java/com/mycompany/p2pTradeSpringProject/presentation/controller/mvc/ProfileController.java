@@ -5,7 +5,7 @@ import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankAccountDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.BankAccountRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.BankAccountResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.GetBankAccountsResponse;
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.domain.entity.User;
 import com.mycompany.p2pTradeSpringProject.security.CustomUserDetails;
 import com.mycompany.p2pTradeSpringProject.service.BankAccountService;
@@ -57,7 +57,7 @@ public class ProfileController {
 
     @GetMapping("/bank_accounts/add")
     public String addBankAccount(Model model,
-                                 @ModelAttribute("errors") ArrayList<Error> errors) {
+                                 @ModelAttribute("errors") ArrayList<ValidationError> errors) {
 
         model.addAttribute("banks", bankService.getAllBanks().getBanks());
         model.addAttribute("currencies", currencyService.getAllCurrencies());
@@ -83,7 +83,7 @@ public class ProfileController {
     public String viewBankAccount(@PathVariable int id,
                                   @AuthenticationPrincipal CustomUserDetails userDetails,
                                   Model model,
-                                  @ModelAttribute("errors") ArrayList<Error> errors) {
+                                  @ModelAttribute("errors") ArrayList<ValidationError> errors) {
 
         BankAccountDto bankAccountDto = bankAccountService.getBankAccountById(id, userDetails.getUser().getId());
         model.addAttribute("bankAccount", bankAccountDto);

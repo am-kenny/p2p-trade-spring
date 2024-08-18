@@ -2,7 +2,7 @@ package com.mycompany.p2pTradeSpringProject.presentation.controller.mvc;
 
 import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.CurrencyDto;
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.CreateTradeRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.CreateTradeResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.GetOpenTradesResponse;
@@ -51,7 +51,7 @@ public class TradesController {
 
     @GetMapping("/create")
     public String createTrade(Model model,
-                              @ModelAttribute("errors") ArrayList<Error> errors) {
+                              @ModelAttribute("errors") ArrayList<ValidationError> errors) {
 
         List<CurrencyDto> currencies = currencyService.getAllCurrencies();
         model.addAttribute("currencies", currencies);

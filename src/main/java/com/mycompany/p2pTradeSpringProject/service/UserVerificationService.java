@@ -1,14 +1,13 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.domain.dto.userprofile.request.VerificationRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.userprofile.response.VerificationResponse;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUser;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUserVerification;
 import com.mycompany.p2pTradeSpringProject.domain.entity.User;
 import com.mycompany.p2pTradeSpringProject.domain.entity.UserVerification;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
+import com.mycompany.p2pTradeSpringProject.component.ValidationWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,10 +27,10 @@ public class UserVerificationService {
     private static final String STATIC_PATH = "D:\\IdeaProjects\\p2pTradeSpringProject\\src\\main\\resources\\static\\";
     private static final String PASSPORT_PHOTO_DIRECTORY = "passport_images\\";
 
-    private final Validator validator;
-
     private final IDAOUserVerification daoUserVerification;
     private final IDAOUser daoUser;
+
+    private final ValidationWrapper validationWrapper;
 
 
     @Transactional(readOnly = true)
@@ -45,7 +43,7 @@ public class UserVerificationService {
     public VerificationResponse verifyUser(Integer userId, VerificationRequest verificationRequest) {
 
         Optional<User> userOptional = daoUser.findById(userId);
-        Set<Error> errors = validateVerificationRequest(userOptional, verificationRequest);
+        Set<ValidationError> errors = validateVerificationRequest(userOptional, verificationRequest);
 
         if (!errors.isEmpty()) {
             return VerificationResponse.builder()
@@ -76,30 +74,23 @@ public class UserVerificationService {
                 .build();
     }
 
-    private Set<Error> validateVerificationRequest(Optional<User> userOptional, VerificationRequest request) {
-        Set<ConstraintViolation<VerificationRequest>> violations = validator.validate(request);
-        Set<Error> errors = new HashSet<>();
-
-        if (!violations.isEmpty()) {
-            violations.forEach(violation -> errors.add(Error.builder()
-                    .message(violation.getMessage())
-                    .build()));
-        }
+    private Set<ValidationError> validateVerificationRequest(Optional<User> userOptional, VerificationRequest request) {
+        Set<ValidationError> errors = validationWrapper.validateObject(request);
 
         if (daoUserVerification.existsByPassportNumber(request.getPassportNumber())) {
-            errors.add(Error.builder()
+            errors.add(ValidationError.builder()
                     .message("User with this passport number already exists")
                     .build());
         }
 
         if (userOptional.isEmpty()) {
-            errors.add(Error.builder()
+            errors.add(ValidationError.builder()
                     .message("User with this id not found")
                     .build());
         }
 
         if (userOptional.filter(value -> value.getUserVerification() != null).isPresent()) {
-            errors.add(Error.builder()
+            errors.add(ValidationError.builder()
                     .message("User with this id is already verified")
                     .build());
         }

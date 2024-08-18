@@ -1,7 +1,7 @@
 package com.mycompany.p2pTradeSpringProject.presentation.controller.mvc;
 
 import com.mycompany.p2pTradeSpringProject.constant.Urls;
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.domain.dto.userprofile.request.VerificationRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.userprofile.response.VerificationResponse;
 import com.mycompany.p2pTradeSpringProject.domain.entity.User;
@@ -28,7 +28,7 @@ public class VerificationController {
 
     @GetMapping
     public String verify(@AuthenticationPrincipal CustomUserDetails userDetails,
-                         @ModelAttribute("errors") ArrayList<Error> errors) {
+                         @ModelAttribute("errors") ArrayList<ValidationError> errors) {
 
         boolean isVerified = userVerificationService.isVerified(userDetails.getUser().getId());
 

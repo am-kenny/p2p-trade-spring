@@ -4,7 +4,7 @@ import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.CreateBankRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.CreateBankResponse;
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.service.BankService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ public class BankController {
     BankService bankService;
 
     @GetMapping("/create")
-    public String addBank(@ModelAttribute("errors") ArrayList<Error> errors) {
+    public String addBank(@ModelAttribute("errors") ArrayList<ValidationError> errors) {
         return "bank/addBank";
     }
 

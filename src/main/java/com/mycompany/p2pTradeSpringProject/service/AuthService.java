@@ -2,17 +2,15 @@ package com.mycompany.p2pTradeSpringProject.service;
 
 import com.mycompany.p2pTradeSpringProject.domain.dto.auth.request.RegistrationRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.auth.response.RegistrationResponse;
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUser;
 import com.mycompany.p2pTradeSpringProject.domain.entity.User;
 import com.mycompany.p2pTradeSpringProject.service.mapper.UserMapper;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
+import com.mycompany.p2pTradeSpringProject.component.ValidationWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -20,15 +18,15 @@ import java.util.Set;
 @AllArgsConstructor
 public class AuthService {
 
-    private final Validator validator;
-
     private final IDAOUser daoUser;
+
+    private final ValidationWrapper validationWrapper;
 
 
     @Transactional
     public RegistrationResponse register(RegistrationRequest request) {
 
-        Set<Error> errors = validateRegistrationRequest(request);
+        Set<ValidationError> errors = validateRegistrationRequest(request);
 
         if (!errors.isEmpty()) {
             return RegistrationResponse.builder()
@@ -49,24 +47,18 @@ public class AuthService {
     }
 
 
-    private Set<Error> validateRegistrationRequest(RegistrationRequest request) {
-        Set<ConstraintViolation<RegistrationRequest>> violations = validator.validate(request);
-        Set<Error> errors = new HashSet<>();
+    private Set<ValidationError> validateRegistrationRequest(RegistrationRequest request) {
 
-        if (!violations.isEmpty()) {
-            violations.forEach(violation -> errors.add(Error.builder()
-                    .message(violation.getMessage())
-                    .build()));
-        }
+        Set<ValidationError> errors = validationWrapper.validateObject(request);
 
         if (daoUser.existsByUsername(request.getUsername())) {
-            errors.add(Error.builder()
+            errors.add(ValidationError.builder()
                     .message("User with this username already exists")
                     .build());
         }
 
         if (daoUser.existsByEmail(request.getEmail())) {
-            errors.add(Error.builder()
+            errors.add(ValidationError.builder()
                     .message("User with this email already exists")
                     .build());
         }

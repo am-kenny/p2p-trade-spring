@@ -1,25 +1,20 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
+import com.mycompany.p2pTradeSpringProject.component.ValidationWrapper;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankAccountDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.BankAccountRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.BankAccountResponse;
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.GetBankAccountsResponse;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.exception.custom.BankAccountNotFoundException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOBankAccount;
 import com.mycompany.p2pTradeSpringProject.domain.entity.BankAccount;
-import com.mycompany.p2pTradeSpringProject.service.mapper.BankAccountMapper;
-import com.mycompany.p2pTradeSpringProject.service.mapper.BankMapper;
-import com.mycompany.p2pTradeSpringProject.service.mapper.CurrencyMapper;
-import com.mycompany.p2pTradeSpringProject.service.mapper.UserMapper;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
+import com.mycompany.p2pTradeSpringProject.service.mapper.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,9 +23,10 @@ import java.util.Set;
 @AllArgsConstructor
 public class BankAccountService {
 
-    private final Validator validator;
+    private final IDAOBankAccount daoBankAccount;
 
-    IDAOBankAccount daoBankAccount;
+    private final ValidationWrapper validationWrapper;
+
 
     @Transactional(readOnly = true)
     public GetBankAccountsResponse getUsersBankAccounts(Integer userId) {
@@ -59,7 +55,7 @@ public class BankAccountService {
 
     @Transactional
     public BankAccountResponse createBankAccountForUser   (BankAccountRequest request, Integer userId) {
-        Set<Error> errors = validateBankAccountRequest(request);
+        Set<ValidationError> errors = validationWrapper.validateObject(request);
 
         if (!errors.isEmpty()) {
             return BankAccountResponse.builder()
@@ -81,7 +77,8 @@ public class BankAccountService {
 
     @Transactional
     public BankAccountResponse editBankAccountForUser(BankAccountRequest request, Integer userId, Integer bankAccountId) {
-        Set<Error> errors = validateBankAccountRequest(request);
+        Set<ValidationError> errors = validationWrapper.validateObject(request);
+
 
         if (!errors.isEmpty()) {
             return BankAccountResponse.builder()
@@ -126,16 +123,4 @@ public class BankAccountService {
                 .build();
     }
 
-    private Set<Error> validateBankAccountRequest(BankAccountRequest request) {
-        Set<ConstraintViolation<BankAccountRequest>> violations = validator.validate(request);
-        Set<Error> errors = new HashSet<>();
-
-        if (!violations.isEmpty()) {
-            violations.forEach(violation -> errors.add(Error.builder()
-                    .message(violation.getMessage())
-                    .build()));
-        }
-
-        return errors;
-    }
 }

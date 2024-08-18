@@ -4,17 +4,15 @@ import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.request.CreateBankRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.CreateBankResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.response.GetBanksResponse;
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.exception.custom.BankNotFoundException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOBank;
 import com.mycompany.p2pTradeSpringProject.service.mapper.BankMapper;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
+import com.mycompany.p2pTradeSpringProject.component.ValidationWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -22,9 +20,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class BankService {
 
-    private final Validator validator;
-
     IDAOBank daoBank;
+
+    private final ValidationWrapper validationWrapper;
 
 
     @Transactional(readOnly = true)
@@ -44,7 +42,7 @@ public class BankService {
 
     @Transactional
     public CreateBankResponse createBank(CreateBankRequest request) {
-        Set<Error> errors = validateCreateBankRequest(request);
+        Set<ValidationError> errors = validationWrapper.validateObject(request);
 
         if (!errors.isEmpty()) {
             return CreateBankResponse.builder()
@@ -61,16 +59,4 @@ public class BankService {
                 .build();
     }
 
-    private Set<Error> validateCreateBankRequest(CreateBankRequest request) {
-        Set<ConstraintViolation<CreateBankRequest>> violations = validator.validate(request);
-        Set<Error> errors = new HashSet<>();
-
-        if (!violations.isEmpty()) {
-            violations.forEach(violation -> errors.add(Error.builder()
-                    .message(violation.getMessage())
-                    .build()));
-        }
-
-        return errors;
-    }
 }

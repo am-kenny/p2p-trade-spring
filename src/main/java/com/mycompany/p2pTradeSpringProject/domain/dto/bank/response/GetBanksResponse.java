@@ -1,7 +1,7 @@
 package com.mycompany.p2pTradeSpringProject.domain.dto.bank.response;
 
 import com.mycompany.p2pTradeSpringProject.domain.dto.bank.BankDto;
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import lombok.Builder;
 import lombok.Value;
 
@@ -12,5 +12,5 @@ import java.util.Set;
 @Builder
 public class GetBanksResponse {
     List<BankDto> banks;
-    Set<Error> errors;
+    Set<ValidationError> errors;
 }

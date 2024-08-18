@@ -1,6 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.domain.dto.auth.response;
 
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import lombok.Builder;
 import lombok.Value;
 
@@ -11,5 +11,5 @@ import java.util.Set;
 public class RegistrationResponse {
     boolean success;
     Integer userId;
-    Set<Error> errors;
+    Set<ValidationError> errors;
 }

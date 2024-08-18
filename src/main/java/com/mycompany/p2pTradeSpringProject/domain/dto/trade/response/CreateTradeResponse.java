@@ -1,15 +1,15 @@
 package com.mycompany.p2pTradeSpringProject.domain.dto.trade.response;
 
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import lombok.Builder;
 import lombok.Value;
 
-import java.util.List;
+import java.util.Set;
 
 @Value
 @Builder
 public class CreateTradeResponse {
     boolean success;
     Integer tradeId;
-    List<Error> errors;
+    Set<ValidationError> errors;
 }

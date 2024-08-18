@@ -1,6 +1,6 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
+import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.OpenTradeDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.CreateTradeRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.CreateTradeResponse;
@@ -10,8 +10,7 @@ import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOTrade;
 import com.mycompany.p2pTradeSpringProject.domain.entity.Trade;
 import com.mycompany.p2pTradeSpringProject.service.mapper.TradeMapper;
 import com.mycompany.p2pTradeSpringProject.service.mapper.UserMapper;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
+import com.mycompany.p2pTradeSpringProject.component.ValidationWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -28,24 +27,20 @@ import static com.mycompany.p2pTradeSpringProject.persistence.repositories.speci
 @AllArgsConstructor
 public class TradeService {
 
-    private final Validator validator;
-
     private final IDAOTrade daoTrade;
+
+    private final ValidationWrapper validationWrapper;
 
 
     @Transactional
     public CreateTradeResponse createTrade(CreateTradeRequest request, Integer userId) {
 
-        Set<ConstraintViolation<CreateTradeRequest>> violations = validator.validate(request);
+        Set<ValidationError> errors = validationWrapper.validateObject(request);
 
-        if (!violations.isEmpty()) {
+        if (!errors.isEmpty()) {
             return CreateTradeResponse.builder()
                     .success(false)
-                    .errors(violations.stream()
-                            .map(violation -> Error.builder()
-                                    .message(violation.getMessage())
-                                    .build())
-                            .toList())
+                    .errors(errors)
                     .build();
         }
 

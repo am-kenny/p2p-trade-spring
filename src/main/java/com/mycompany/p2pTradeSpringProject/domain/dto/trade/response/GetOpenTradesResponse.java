@@ -1,6 +1,5 @@
 package com.mycompany.p2pTradeSpringProject.domain.dto.trade.response;
 
-import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.OpenTradeDto;
 import lombok.Builder;
 import lombok.Value;
@@ -11,5 +10,4 @@ import java.util.List;
 @Builder
 public class GetOpenTradesResponse {
     List<OpenTradeDto> openTrades;
-    List<Error> errors;
 }
