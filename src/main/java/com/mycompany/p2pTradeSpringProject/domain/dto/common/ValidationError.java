@@ -7,6 +7,6 @@ import lombok.Value;
 @Builder
 public class ValidationError {
     String code;
-    String message;
-    String path;
+    String detail;
+    String source;
 }

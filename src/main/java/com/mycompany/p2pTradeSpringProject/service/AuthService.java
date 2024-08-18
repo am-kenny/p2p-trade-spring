@@ -53,13 +53,17 @@ public class AuthService {
 
         if (daoUser.existsByUsername(request.getUsername())) {
             errors.add(ValidationError.builder()
-                    .message("User with this username already exists")
+                    .code("UniqueUsername")
+                    .detail("User with this username already exists")
+                    .source("username")
                     .build());
         }
 
         if (daoUser.existsByEmail(request.getEmail())) {
             errors.add(ValidationError.builder()
-                    .message("User with this email already exists")
+                    .code("UniqueEmail")
+                    .detail("User with this email already exists")
+                    .source("email")
                     .build());
         }
 

@@ -43,7 +43,11 @@ public class UserVerificationService {
     public VerificationResponse verifyUser(Integer userId, VerificationRequest verificationRequest) {
 
         Optional<User> userOptional = daoUser.findById(userId);
-        Set<ValidationError> errors = validateVerificationRequest(userOptional, verificationRequest);
+
+        User user = userOptional.orElseThrow(() ->
+                new IllegalArgumentException("User with this id not found"));
+
+        Set<ValidationError> errors = validateVerificationRequest(user, verificationRequest);
 
         if (!errors.isEmpty()) {
             return VerificationResponse.builder()
@@ -52,8 +56,6 @@ public class UserVerificationService {
                     .build();
         }
 
-        User user = userOptional.orElseThrow(() ->
-                new IllegalArgumentException("User with this id not found"));
 
         String passportPhotoReference = savePassportPhoto(verificationRequest.getPassportPhoto());
 
@@ -74,24 +76,22 @@ public class UserVerificationService {
                 .build();
     }
 
-    private Set<ValidationError> validateVerificationRequest(Optional<User> userOptional, VerificationRequest request) {
+    private Set<ValidationError> validateVerificationRequest(User user, VerificationRequest request) {
         Set<ValidationError> errors = validationWrapper.validateObject(request);
 
         if (daoUserVerification.existsByPassportNumber(request.getPassportNumber())) {
             errors.add(ValidationError.builder()
-                    .message("User with this passport number already exists")
+                    .code("Unique")
+                    .detail("User with this passport number already exists")
+                    .source("passportNumber")
                     .build());
         }
 
-        if (userOptional.isEmpty()) {
+        if (user.getUserVerification() != null) {
             errors.add(ValidationError.builder()
-                    .message("User with this id not found")
-                    .build());
-        }
-
-        if (userOptional.filter(value -> value.getUserVerification() != null).isPresent()) {
-            errors.add(ValidationError.builder()
-                    .message("User with this id is already verified")
+                    .code("AlreadyVerified")
+                    .detail("User with this id is already verified")
+                    .source("userId")
                     .build());
         }
 

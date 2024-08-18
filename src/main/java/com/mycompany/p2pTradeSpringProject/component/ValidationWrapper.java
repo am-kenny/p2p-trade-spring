@@ -29,8 +29,8 @@ public class ValidationWrapper {
     private ValidationError mapViolationToValidationError(ConstraintViolation<?> violation) {
         return ValidationError.builder()
                 .code(violation.getConstraintDescriptor().getAnnotation().annotationType().getSimpleName())
-                .message(violation.getMessage())
-                .path(violation.getPropertyPath().toString())
+                .detail(violation.getMessage())
+                .source(violation.getPropertyPath().toString())
                 .build();
     }
 
