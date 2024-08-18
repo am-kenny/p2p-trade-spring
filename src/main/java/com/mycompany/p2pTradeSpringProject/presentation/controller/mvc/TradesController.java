@@ -4,7 +4,6 @@ import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.CurrencyDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.CreateTradeRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.GetOpenTradesRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.CreateTradeResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.GetOpenTradesResponse;
 import com.mycompany.p2pTradeSpringProject.security.CustomUserDetails;
@@ -19,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(Urls.TRADES)
@@ -38,10 +38,10 @@ public class TradesController {
     }
 
     @GetMapping()
-    public String viewOpenTrades(GetOpenTradesRequest tradesRequest,
+    public String viewOpenTrades(@RequestParam(required=false) Map<String,String> qparams,
                                  Model model) {
 
-        GetOpenTradesResponse getOpenTradesResponse = tradeService.getOpenTrades(tradesRequest);
+        GetOpenTradesResponse getOpenTradesResponse = tradeService.getOpenTrades(qparams);
         List<CurrencyDto> currencies = currencyService.getAllCurrencies();
         model.addAttribute("trades", getOpenTradesResponse.getOpenTrades());
         model.addAttribute("currencies", currencies);

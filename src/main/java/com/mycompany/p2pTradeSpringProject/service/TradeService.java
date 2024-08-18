@@ -3,7 +3,6 @@ package com.mycompany.p2pTradeSpringProject.service;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.Error;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.OpenTradeDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.CreateTradeRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.GetOpenTradesRequest;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.CreateTradeResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.GetOpenTradesResponse;
 import com.mycompany.p2pTradeSpringProject.exception.custom.TradeNotFoundException;
@@ -19,8 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import static com.mycompany.p2pTradeSpringProject.persistence.repositories.specifications.TradeSpecifications.*;
 
@@ -69,21 +68,20 @@ public class TradeService {
     }
 
     @Transactional(readOnly = true)
-    public GetOpenTradesResponse getOpenTrades(GetOpenTradesRequest request) {
-
-        Logger.getGlobal().info("GetOpenTradesRequest: " + "getBuy:" + request.getBuy() + " tradeCurrencyId:" + request.getTradeCurrencyId() + " exchangeCurrencyId:" + request.getExchangeCurrencyId());
-
+    public GetOpenTradesResponse getOpenTrades(Map<String, String> params) {
         List<OpenTradeDto> openTradeList;
         Specification<Trade> specification = isOpen();
 
-        if (request.getBuy() != null) {
-            specification = specification.and(isSeller(request.getBuy()));
-        }
-        if (request.getTradeCurrencyId() != null) {
-            specification = specification.and(tradeCurrencyId(request.getTradeCurrencyId()));
-        }
-        if (request.getExchangeCurrencyId() != null) {
-            specification = specification.and(exchangeCurrencyId(request.getExchangeCurrencyId()));
+        if (params != null && !params.isEmpty()) {
+            if (params.containsKey("buy") && !params.get("buy").isBlank()) {
+                specification = specification.and(isSeller(Boolean.parseBoolean(params.get("buy"))));
+            }
+            if (params.containsKey("tradeCurrencyId") && !params.get("tradeCurrencyId").isBlank()) {
+                specification = specification.and(tradeCurrencyId(Integer.parseInt(params.get("tradeCurrencyId"))));
+            }
+            if (params.containsKey("exchangeCurrencyId") && !params.get("exchangeCurrencyId").isBlank()) {
+                specification = specification.and(exchangeCurrencyId(Integer.parseInt(params.get("exchangeCurrencyId"))));
+            }
         }
 
         openTradeList = daoTrade.findAll(specification)
