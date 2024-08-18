@@ -1,8 +1,8 @@
 package com.mycompany.p2pTradeSpringProject.service;
 
 import com.mycompany.p2pTradeSpringProject.domain.dto.auth.request.RegistrationRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.auth.response.RegistrationResponse;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
+import com.mycompany.p2pTradeSpringProject.exception.custom.ValidationException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOUser;
 import com.mycompany.p2pTradeSpringProject.domain.entity.User;
 import com.mycompany.p2pTradeSpringProject.service.mapper.UserMapper;
@@ -16,7 +16,7 @@ import java.util.Set;
 @Service
 @Transactional
 @AllArgsConstructor
-public class AuthService {
+public class AuthService { //TODO: Combine with UserDetailsService?
 
     private final IDAOUser daoUser;
 
@@ -24,26 +24,15 @@ public class AuthService {
 
 
     @Transactional
-    public RegistrationResponse register(RegistrationRequest request) {
-
+    public Integer register(RegistrationRequest request) {
         Set<ValidationError> errors = validateRegistrationRequest(request);
 
         if (!errors.isEmpty()) {
-            return RegistrationResponse.builder()
-                    .success(false)
-                    .errors(errors)
-                    .build();
+            throw new ValidationException(errors);
         }
 
-
         User user = UserMapper.toEntity(request);
-        Integer userId = daoUser.create(user);
-
-        return RegistrationResponse.builder()
-                .success(true)
-                .userId(userId)
-                .build();
-
+        return daoUser.create(user);
     }
 
 
