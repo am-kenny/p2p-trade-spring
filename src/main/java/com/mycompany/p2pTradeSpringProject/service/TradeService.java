@@ -3,9 +3,8 @@ package com.mycompany.p2pTradeSpringProject.service;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.OpenTradeDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.CreateTradeRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.CreateTradeResponse;
-import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.GetOpenTradesResponse;
 import com.mycompany.p2pTradeSpringProject.exception.custom.TradeNotFoundException;
+import com.mycompany.p2pTradeSpringProject.exception.custom.ValidationException;
 import com.mycompany.p2pTradeSpringProject.persistence.daointerfaces.IDAOTrade;
 import com.mycompany.p2pTradeSpringProject.domain.entity.Trade;
 import com.mycompany.p2pTradeSpringProject.service.mapper.TradeMapper;
@@ -33,25 +32,18 @@ public class TradeService {
 
 
     @Transactional
-    public CreateTradeResponse createTrade(CreateTradeRequest request, Integer userId) {
+    public Integer createTrade(CreateTradeRequest request, Integer userId) {
 
         Set<ValidationError> errors = validationWrapper.validateObject(request);
 
         if (!errors.isEmpty()) {
-            return CreateTradeResponse.builder()
-                    .success(false)
-                    .errors(errors)
-                    .build();
+            throw new ValidationException(errors);
         }
 
         Trade trade = TradeMapper.toEntity(request);
         trade.setInitiatorUser(UserMapper.toEntity(userId));
-        Integer tradeId = daoTrade.create(trade);
 
-        return CreateTradeResponse.builder()
-                .success(true)
-                .tradeId(tradeId)
-                .build();
+        return daoTrade.create(trade);
     }
 
     @Transactional(readOnly = true)
@@ -63,8 +55,7 @@ public class TradeService {
     }
 
     @Transactional(readOnly = true)
-    public GetOpenTradesResponse getOpenTrades(Map<String, String> params) {
-        List<OpenTradeDto> openTradeList;
+    public List<OpenTradeDto> getOpenTrades(Map<String, String> params) {
         Specification<Trade> specification = isOpen();
 
         if (params != null && !params.isEmpty()) {
@@ -79,15 +70,10 @@ public class TradeService {
             }
         }
 
-        openTradeList = daoTrade.findAll(specification)
+        return daoTrade.findAll(specification)
                 .stream()
                 .map(TradeMapper::mapToOpenTradeDto)
                 .toList();
-
-
-        return GetOpenTradesResponse.builder()
-                .openTrades(openTradeList)
-                .build();
     }
 
 }

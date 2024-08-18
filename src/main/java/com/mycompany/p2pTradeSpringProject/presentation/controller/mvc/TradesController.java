@@ -3,9 +3,9 @@ package com.mycompany.p2pTradeSpringProject.presentation.controller.mvc;
 import com.mycompany.p2pTradeSpringProject.constant.Urls;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.CurrencyDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.common.ValidationError;
+import com.mycompany.p2pTradeSpringProject.domain.dto.trade.OpenTradeDto;
 import com.mycompany.p2pTradeSpringProject.domain.dto.trade.request.CreateTradeRequest;
-import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.CreateTradeResponse;
-import com.mycompany.p2pTradeSpringProject.domain.dto.trade.response.GetOpenTradesResponse;
+import com.mycompany.p2pTradeSpringProject.exception.custom.ValidationException;
 import com.mycompany.p2pTradeSpringProject.security.CustomUserDetails;
 import com.mycompany.p2pTradeSpringProject.service.CurrencyService;
 import com.mycompany.p2pTradeSpringProject.service.TradeService;
@@ -41,9 +41,9 @@ public class TradesController {
     public String viewOpenTrades(@RequestParam(required=false) Map<String,String> qparams,
                                  Model model) {
 
-        GetOpenTradesResponse getOpenTradesResponse = tradeService.getOpenTrades(qparams);
+        List<OpenTradeDto> openTrades = tradeService.getOpenTrades(qparams);
         List<CurrencyDto> currencies = currencyService.getAllCurrencies();
-        model.addAttribute("trades", getOpenTradesResponse.getOpenTrades());
+        model.addAttribute("trades", openTrades);
         model.addAttribute("currencies", currencies);
         return "trade/tradeList";
     }
@@ -64,15 +64,13 @@ public class TradesController {
                               @AuthenticationPrincipal CustomUserDetails userDetails,
                               RedirectAttributes redirectAttributes) {
 
-        CreateTradeResponse response = tradeService.createTrade(createTradeRequest, userDetails.getUser().getId());
-
-        if (!response.isSuccess()) {
-            redirectAttributes.addFlashAttribute("errors", response.getErrors());
+        try {
+            Integer tradeId = tradeService.createTrade(createTradeRequest, userDetails.getUser().getId());
+            return "redirect:" + Urls.TRADES + "/" + tradeId;
+        } catch (ValidationException e) {
+            redirectAttributes.addFlashAttribute("errors", e.getValidationErrors());
             return "redirect:" + Urls.TRADES + "/create";
         }
-
-        return "redirect:" + Urls.TRADES + "/" + response.getTradeId();
     }
-
 
 }
